@@ -2,7 +2,9 @@
 
 > A personalised, interactive care plan for your cat.
 
-**Status:** v0.1 core built (logic tested; UI not yet visually checked in a browser) · Portfolio project #13 · see `../README.md`
+**Status:** v0.1 core built; logic tested; UI checked in real Chrome
+
+![cat-compass screenshot](assets/screenshot.png)
 
 ## The idea
 
@@ -50,11 +52,15 @@ The weight-loss target estimates ideal weight as ~10 % per BCS point above 5. Br
 
 **Not veterinary advice.** "Check with your vet" prompts wherever a recommendation depends on the individual cat.
 
+## Browser check
+
+Checked in real Chrome (headless, driven with puppeteer) on 2026-10-12: the profile form, feeding output and fridge sheet work; a weight of −3 shows "Enter a weight between 0.3 and 15 kg" instead of NaN. **Content is still unverified against sources.** Not checked: print layout.
+
 ## Next (tomorrow)
 
 - **Verify all content against sources** (feeding factors, vaccine schedule, red flags). Add real URLs.
 - Verify ACT rules or remove the section.
-- Look at the UI in a browser; BCS illustrations; stepped wizard if it feels better.
+- BCS illustrations; stepped wizard if it feels better.
 
 ## Stretch
 
@@ -62,7 +68,7 @@ Weight tracker with trend chart; reminders export to calendar (.ics).
 
 ## Definition of done
 
-- [ ] Hero GIF or screenshot at the top of this README
+- [x] Hero GIF or screenshot at the top of this README (static screenshot; no GIF yet)
 - [x] Live demo link or one-command run (`npm install && npm run dev`)
 - [ ] "How I know it's right" section filled in with real results
 - [ ] Tests passing in CI, badge added
