@@ -2,7 +2,9 @@
  * Energy requirement maths for cats.
  *   RER = 70 × kg^0.75            (resting energy requirement, kcal/day)
  *   DER = RER × life-stage factor
- * Factors follow the commonly used WSAVA / AAHA tables; they are starting points, not prescriptions.
+ * Factors are the feline life-stage factors in AAHA 2021 Nutrition and Weight Management Guidelines, Box 1:
+ *   neutered adult 1.2–1.4, intact adult 1.4–1.6, inactive / obese-prone 1.0, weight loss 0.8 (of ideal weight),
+ *   growth 2.5. Starting points to adjust by monitoring weight and body condition, not prescriptions.
  */
 
 export type LifeStage = "kitten-young" | "kitten-older" | "adult" | "senior";
@@ -36,14 +38,11 @@ export function lifeStage(ageMonths: number): LifeStage {
 }
 
 export function stageFactor(input: Pick<FeedingInput, "ageMonths" | "desexed" | "activity">): number {
-  const stage = lifeStage(input.ageMonths);
-  if (stage === "kitten-young") return 2.5;
-  if (stage === "kitten-older") return 2.0;
-  let f = input.desexed ? 1.2 : 1.4;
-  if (input.activity === "low") f = Math.min(f, 1.0);
-  if (input.activity === "high") f += 0.2;
-  if (stage === "senior") f = Math.min(f, 1.1);
-  return f;
+  if (lifeStage(input.ageMonths).startsWith("kitten")) return 2.5; // AAHA: feline growth factor 2.5
+  if (input.activity === "low") return 1.0; // inactive / obese-prone
+  // Adult ranges: neutered 1.2–1.4, intact 1.4–1.6. Normal activity uses the low end, high activity the high end.
+  const [lo, hi] = input.desexed ? [1.2, 1.4] : [1.4, 1.6];
+  return input.activity === "high" ? hi : lo;
 }
 
 /** Estimate ideal weight: roughly 10% of body weight per BCS point above 5, 5% per point below. */

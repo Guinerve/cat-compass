@@ -19,9 +19,9 @@ export function healthSchedule(p: { ageMonths: number; lifestyle: Lifestyle; reg
   items.push({
     title: "F3 core vaccine (panleukopenia, herpesvirus, calicivirus)",
     when: kitten
-      ? "At 6–8, 10–12 and 14–16 weeks, then a booster at 12 months"
-      : "Booster per your vet: every 1–3 years depending on the vaccine and risk",
-    note: "Core for every cat, including indoor cats.", source: "WSAVA vaccination guidelines",
+      ? "From 6–8 weeks, repeated every 2–4 weeks until at least 16 weeks, then a booster from 26 weeks (6 months) to 12 months"
+      : "After the kitten course and first booster, core vaccines are usually due no more often than every 3 years; your vet will set the interval",
+    note: "Core for every cat, including indoor cats. Exact timing varies by vaccine brand and by clinic.", source: "WSAVA 2024 Guidelines for the Vaccination of Dogs and Cats",
   });
   if (p.lifestyle === "outdoor") {
     items.push({

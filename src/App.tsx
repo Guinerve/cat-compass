@@ -51,7 +51,7 @@ export function App() {
         {tab === "New owner" && <NewOwner cat={cat} />}
         {tab === "Fridge sheet" && <Fridge cat={cat} />}
       </main>
-      <footer>Sources: WSAVA, AAFP / ISFM (International Cat Care), RSPCA Australia, Cornell Feline Health Center, Australian Veterinary Association, ACT Government.</footer>
+      <footer>Energy factors: AAHA 2021 Nutrition and Weight Management Guidelines. Vaccines: WSAVA 2024. ACT rules: ACT Government. Other items cite WSAVA, AAFP / ISFM, RSPCA Australia, Cornell Feline Health Center and the AVA by name and are not yet individually verified.</footer>
     </div>
   );
 }
@@ -140,7 +140,7 @@ function Health({ cat }: { cat: CatProfile }) {
       <ul className="cards">{items.map((i) => <li key={i.title}><b>{i.title}</b><br />{i.when}<br /><small>{i.note} ({i.source})</small></li>)}</ul>
       {breed && <><h3>Breed predispositions: {breed.name}</h3><p className="hint">Risks are tendencies, not diagnoses. Ask your vet which screening suits your cat.</p><ul>{breed.risks.map((r) => <li key={r}>{r}</li>)}</ul></>}
       {cat.region === "act" && (
-        <div className="callout"><b>ACT rules.</b> {act.note}<ul>{act.items.map((i) => <li key={i}>{i}</li>)}</ul><small>{act.source}</small></div>
+        <div className="callout"><b>ACT rules{act.verified ? "" : " (unverified)"}.</b> {act.note}<ul>{act.items.map((i) => <li key={i}>{i}</li>)}</ul><small>Source: {act.source}</small></div>
       )}
     </section>
   );

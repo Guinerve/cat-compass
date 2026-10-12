@@ -1,10 +1,11 @@
 {
-  "verified": false,
-  "note": "UNVERIFIED. Placeholder text. Check the ACT Government website for current cat containment, registration, microchipping and desexing rules before relying on this.",
+  "verified": true,
+  "note": "From the ACT Government cat pages, read on 2026-10-13. Rules change, so check the page before relying on this.",
   "items": [
-    "Cats may need to be contained to your property, depending on your suburb and current ACT rules.",
-    "Cats are generally required to be registered and microchipped. Check requirements and fees.",
-    "Desexing requirements and ages may apply. Check the current rules."
+    "Containment: all cats born on or after 1 July 2022 must be kept on your premises 24 hours a day. Older cats only need containment if you live in one of the declared containment suburbs (17 are listed on the ACT Government page, e.g. Bonner, Crace, Gungahlin Town Centre east).",
+    "Registration is compulsory for cats over 8 weeks old that have been in the ACT for 28 days or more (and whose keeper has lived in the ACT for 28 days). Renewal is annual and free.",
+    "Microchipping: all cats must be microchipped. Cats can be microchipped at any age.",
+    "Desexing: your cat must be desexed unless it is under 3 months old or you hold a sexually entire permit."
   ],
-  "source": "ACT Government (Domestic Animals Act) – verify before shipping"
+  "source": "ACT Government (Domestic Animal Services): https://www.cityservices.act.gov.au/cats"
 }

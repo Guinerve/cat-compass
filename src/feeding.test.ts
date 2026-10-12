@@ -7,6 +7,10 @@ const base: FeedingInput = {
 };
 
 describe("RER", () => {
+  it("matches the AAHA 2021 Box 1 worked example: 4.5 kg gives kg^0.75 = 3.09 and RER 216 kcal/day", () => {
+    expect(Math.pow(4.5, 0.75)).toBeCloseTo(3.09, 2);
+    expect(rer(4.5)).toBeCloseTo(216, 0);
+  });
   it("70 × kg^0.75 (4 kg → 197.99 kcal; 3 kg → 159.5; 5 kg → 234.0)", () => {
     expect(rer(4)).toBeCloseTo(197.99, 1);
     expect(rer(3)).toBeCloseTo(159.55, 1);
@@ -21,11 +25,18 @@ describe("life stage factors", () => {
     expect(lifeStage(36)).toBe("adult");
     expect(lifeStage(150)).toBe("senior");
   });
-  it("neutered adult 1.2, intact adult 1.4, kitten 2.5/2.0", () => {
+  // Factors from AAHA 2021 Nutrition and Weight Management Guidelines, Box 1 (feline column).
+  it("follows AAHA Box 1: neutered 1.2–1.4, intact 1.4–1.6, inactive 1.0, growth 2.5", () => {
     expect(stageFactor({ ageMonths: 36, desexed: true, activity: "normal" })).toBe(1.2);
+    expect(stageFactor({ ageMonths: 36, desexed: true, activity: "high" })).toBe(1.4);
     expect(stageFactor({ ageMonths: 36, desexed: false, activity: "normal" })).toBe(1.4);
+    expect(stageFactor({ ageMonths: 36, desexed: false, activity: "high" })).toBe(1.6);
+    expect(stageFactor({ ageMonths: 36, desexed: true, activity: "low" })).toBe(1.0);
     expect(stageFactor({ ageMonths: 3, desexed: false, activity: "normal" })).toBe(2.5);
-    expect(stageFactor({ ageMonths: 8, desexed: false, activity: "normal" })).toBe(2.0);
+    expect(stageFactor({ ageMonths: 8, desexed: false, activity: "normal" })).toBe(2.5);
+  });
+  it("seniors are not capped below the adult factor (no source for a senior cap)", () => {
+    expect(stageFactor({ ageMonths: 150, desexed: true, activity: "normal" })).toBe(1.2);
   });
 });
 

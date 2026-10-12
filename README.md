@@ -2,7 +2,7 @@
 
 > A personalised, interactive care plan for your cat.
 
-**Status:** v0.1 core built; logic tested; UI checked in real Chrome
+**Status:** v0.1 core built; energy maths, vaccines and ACT rules checked against sources; UI checked in real Chrome
 
 ![cat-compass screenshot](assets/screenshot.png)
 
@@ -25,7 +25,7 @@ Dev server binds to `0.0.0.0` on port **5195** so it's reachable over Tailscale 
 - [x] **Daily routine timeline:** 2–3 week tooth-brushing training plan, grooming by coat length, nail trims, litter (one box per cat plus one, scooped daily), play built on hunt → catch → eat → groom → sleep
 - [x] **Toys:** (6 entries; more needed) bought and DIY with step-by-step instructions and safety notes (no unsupervised string toys)
 - [x] **New owners:** "things I wish I'd had", first-week guide, cat-proofing checklist, shopping list with rough costs
-- [ ] **ACT mode:** placeholder text only, flagged UNVERIFIED in the app. Check the ACT Government site before anything is shown as fact. local containment and registration rules (verify current rules before shipping)
+- [x] **ACT mode:** verified against the ACT Government page on 2026-10-13; rules change, so re-check before relying on it. local containment and registration rules (verify current rules before shipping)
 - [x] Multiple cats; printable one-page fridge sheet
 
 ## Run it
@@ -33,16 +33,22 @@ Dev server binds to `0.0.0.0` on port **5195** so it's reachable over Tailscale 
 ```bash
 npm install
 npm run dev      # http://0.0.0.0:5195
-npm test         # 21 tests
+npm test         # 23 tests
 ```
 
 ## How I know it's right
 
-21 unit tests pass (`src/feeding.test.ts`, `src/health.test.ts`).
+23 unit tests pass (`src/feeding.test.ts`, `src/health.test.ts`).
 
 Review fixes: invalid weight/age/BCS/meals now show a message instead of `NaN kcal` (including on the printed fridge sheet); corrupt saved data is backed up and reported, not silently replaced; a failed save shows a warning; an error boundary replaces a blank page.
 
-**Honest status:** the feeding tests check the code against the formulas (RER = 70 × kg^0.75; 4 kg desexed adult → 197.99 kcal RER → 237.6 kcal/day → 62.5 g of a 3800 kcal/kg dry food). They are **not yet checked against worked examples from a veterinary source**, and the life-stage factors (2.5 / 2.0 / 1.2 / 1.4 / 1.0 / 1.1 / 0.8 for weight loss) are from memory of the commonly used WSAVA/AAHA tables. Verify each against the source before this is shown to anyone.
+**Verified against sources (2026-10-13):**
+
+- **Energy maths** against the **AAHA 2021 Nutrition and Weight Management Guidelines, Box 1**: RER = 70 × kg^0.75, the worked example (4.5 kg → kg^0.75 = 3.09, RER 216 kcal/day) is a test, and the feline life-stage factors (neutered adult 1.2–1.4, intact 1.4–1.6, inactive/obese-prone 1.0, weight loss 0.8 of **ideal** weight, growth 2.5). Checking found and fixed two errors: I had used 2.0 for kittens aged 4–12 months (AAHA's feline factor is 2.5), and an unsourced +0.2 for high activity and a senior cap. Normal activity now uses the low end of AAHA's range and high activity the high end.
+- **ACT rules** from the ACT Government cat pages (microchip, registration over 8 weeks, desexing unless under 3 months, containment for cats born on or after 1 July 2022 and in 17 declared suburbs). This replaced placeholder text that was materially wrong about containment.
+- **Vaccines**: core vaccines and the kitten course (from 6–8 weeks, every 2–4 weeks to at least 16 weeks, booster from 26 weeks, then no more often than every 3 years) match the WSAVA 2024 guidelines as summarised in search results; I did not read the PDF itself.
+
+**Still unverified:** the red-flag list and the breed predispositions (sources are named, not checked line by line); the "about 10 % per BCS point above 5" ideal-weight estimate and the "about 1 % of body weight per week" loss rate (AAHA says to base the plan on ideal weight, but I found no source for the rate, so the app tells you to set it with your vet); parasite-prevention advice; the water target of 50 ml/kg/day. Do not present those as sourced.
 
 Sources are named per item in `src/content/*.json` (WSAVA, AAFP / ISFM, RSPCA Australia, Cornell Feline Health Center, AVA) but not yet linked to specific pages.
 
@@ -54,12 +60,11 @@ The weight-loss target estimates ideal weight as ~10 % per BCS point above 5. Br
 
 ## Browser check
 
-Checked in real Chrome (headless, driven with puppeteer) on 2026-10-12: the profile form, feeding output and fridge sheet work; a weight of −3 shows "Enter a weight between 0.3 and 15 kg" instead of NaN. **Content is still unverified against sources.** Not checked: print layout.
+Checked in real Chrome (headless, driven with puppeteer) on 2026-10-12: the profile form, feeding output and fridge sheet work; a weight of −3 shows "Enter a weight between 0.3 and 15 kg" instead of NaN. Content is partly verified (see below). Not checked: print layout.
 
 ## Next (tomorrow)
 
-- **Verify all content against sources** (feeding factors, vaccine schedule, red flags). Add real URLs.
-- Verify ACT rules or remove the section.
+- Verify the remaining items listed above as unverified (red flags, breed risks, weight-loss rate). Add real URLs per item.
 - BCS illustrations; stepped wizard if it feels better.
 
 ## Stretch
