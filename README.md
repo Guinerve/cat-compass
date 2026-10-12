@@ -4,6 +4,8 @@
 
 **Status:** v0.1 core built; energy maths, vaccines and ACT rules checked against sources; UI checked in real Chrome
 
+![cat-compass demo](assets/demo.gif)
+
 ![cat-compass screenshot](assets/screenshot.png)
 
 ## The idea
@@ -75,7 +77,7 @@ Weight tracker with trend chart; reminders export to calendar (.ics).
 
 ## Definition of done
 
-- [x] Hero GIF or screenshot at the top of this README (static screenshot; no GIF yet)
+- [x] Hero GIF or screenshot at the top of this README
 - [x] Live demo link or one-command run (`npm install && npm run dev`)
 - [ ] "How I know it's right" section filled in with real results
 - [ ] Tests passing in CI, badge added
