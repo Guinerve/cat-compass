@@ -1,0 +1,32 @@
+{
+  "firstWeek": [
+    "Set up one quiet room with a litter tray, water, food, a hiding spot and a scratching post.",
+    "Let the cat come out on their own schedule. Do not force interaction.",
+    "Keep the same food at first. Change foods gradually over 7–10 days.",
+    "Book a vet check in the first week and bring any health records.",
+    "Introduce other pets slowly, with scent swapping before sight."
+  ],
+  "proofing": [
+    "Remove lilies and other toxic plants.",
+    "Secure windows and balcony doors with sturdy mesh or screens.",
+    "Hide or cover electrical cords.",
+    "Store medicines, cleaning products and string or hair ties out of reach.",
+    "Check washers, dryers and recliners before using them."
+  ],
+  "wish": [
+    "One litter tray per cat plus one extra, scooped daily, in a quiet spot away from food.",
+    "Wet food or added water helps hydration. Cats often drink little from bowls.",
+    "Play with your cat for 10–15 minutes at least twice a day.",
+    "Brush teeth with a cat-safe paste. Start slowly and keep it positive.",
+    "Take a photo and weigh your cat monthly, so changes are easy to spot."
+  ],
+  "shopping": [
+    { "item": "Litter trays (cats + 1)", "cost": "$20–40 each" },
+    { "item": "Litter", "cost": "$15–40 a month" },
+    { "item": "Quality food", "cost": "$40–120 a month" },
+    { "item": "Scratching post", "cost": "$30–150" },
+    { "item": "Carrier", "cost": "$40–100" },
+    { "item": "Initial vet visit and vaccinations", "cost": "$150–400" },
+    { "item": "Desexing and microchip", "cost": "$150–500" }
+  ]
+}
