@@ -122,7 +122,7 @@ function Feeding({ cat, update }: { cat: CatProfile; update: Upd }) {
         <p><b>{plan.kcalPerDay.toFixed(0)} kcal / day</b> <small>(RER {plan.rer.toFixed(0)} × {plan.factor})</small></p>
         {plan.dryGramsPerDay !== null && <p>Dry: <b>{plan.dryGramsPerDay.toFixed(0)} g / day</b></p>}
         {plan.wetCansPerDay !== null && cat.wetShare > 0 && <p>Wet: <b>{plan.wetCansPerDay.toFixed(2)} cans / day</b> (~{plan.wetGramsPerDay!.toFixed(0)} g)</p>}
-        <p>≈ {plan.perMealKcal.toFixed(0)} kcal per meal · Water target ≈ {(plan.waterMlPerDay).toFixed(0)} ml / day <small>(including water in wet food)</small></p>
+        <p>≈ {plan.perMealKcal.toFixed(0)} kcal per meal</p>
         {plan.weightLoss && <p className="callout">Target weight {plan.targetWeightKg.toFixed(1)} kg. Aim to lose about {(plan.weightLoss.weeklyLossKg * 1000).toFixed(0)} g per week (~1% of body weight): roughly {plan.weightLoss.weeksToTarget} weeks. Weigh weekly.</p>}
         {plan.notes.map((n, i) => <p className="hint" key={i}>{n}</p>)}
       </div>

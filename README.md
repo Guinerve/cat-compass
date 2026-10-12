@@ -48,7 +48,9 @@ Review fixes: invalid weight/age/BCS/meals now show a message instead of `NaN kc
 - **ACT rules** from the ACT Government cat pages (microchip, registration over 8 weeks, desexing unless under 3 months, containment for cats born on or after 1 July 2022 and in 17 declared suburbs). This replaced placeholder text that was materially wrong about containment.
 - **Vaccines**: core vaccines and the kitten course (from 6–8 weeks, every 2–4 weeks to at least 16 weeks, booster from 26 weeks, then no more often than every 3 years) match the WSAVA 2024 guidelines as summarised in search results; I did not read the PDF itself.
 
-**Still unverified:** the red-flag list and the breed predispositions (sources are named, not checked line by line); the "about 10 % per BCS point above 5" ideal-weight estimate and the "about 1 % of body weight per week" loss rate (AAHA says to base the plan on ideal weight, but I found no source for the rate, so the app tells you to set it with your vet); parasite-prevention advice; the water target of 50 ml/kg/day. Do not present those as sourced.
+**Also verified (2026-10-13, via search results, not primary papers):** lily toxicity (RSPCA Australia, International Cat Care: all parts including pollen and vase water; kidney failure within days), "not eating for a day: see a vet that day" and the fatty-liver risk (a Sydney vet clinic's triage guidance), and the **0.5–2 % per week** safe weight-loss range (AAHA range as cited by Tufts and a veterinary review; the app uses 1 %). Two claims with no source were **removed**: a "fatal within 24–48 hours" timeframe for urinary blockage, and a 50 ml/kg/day water target.
+
+**Still unverified:** the urinary-blockage, breathing, permethrin, paralysis-tick, toxin and hind-limb items (reasonable, widely stated, but I have not read a source for each); breed predispositions; parasite-prevention advice; the "about 10 % per BCS point above 5" ideal-weight estimate. Do not present those as sourced.
 
 Sources are named per item in `src/content/*.json` (WSAVA, AAFP / ISFM, RSPCA Australia, Cornell Feline Health Center, AVA) but not yet linked to specific pages.
 
@@ -64,7 +66,7 @@ Checked in real Chrome (headless, driven with puppeteer) on 2026-10-12: the prof
 
 ## Next (tomorrow)
 
-- Verify the remaining items listed above as unverified (red flags, breed risks, weight-loss rate). Add real URLs per item.
+- Verify the remaining items listed above as unverified (breed risks, parasite advice, the BCS ideal-weight estimate, the other red flags). Add real URLs per item.
 - BCS illustrations; stepped wizard if it feels better.
 
 ## Stretch

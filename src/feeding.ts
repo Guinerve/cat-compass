@@ -61,7 +61,6 @@ export interface FeedingPlan {
   wetCansPerDay: number | null;
   wetGramsPerDay: number | null;
   perMealKcal: number;
-  waterMlPerDay: number;
   weightLoss?: { weeklyLossKg: number; weeksToTarget: number };
   notes: string[];
 }
@@ -85,7 +84,7 @@ export function feedingPlan(i: FeedingInput): FeedingPlan {
 
   let weightLoss: FeedingPlan["weightLoss"];
   if (losing) {
-    const cap = i.weightKg * 0.01; // aim for ~1% of body weight per week; vet to confirm
+    const cap = i.weightKg * 0.01; // 1% per week sits inside the 0.5–2% per week range cited from AAHA; your vet sets the real rate
     weightLoss = { weeklyLossKg: cap, weeksToTarget: Math.ceil((i.weightKg - target) / cap) };
     notes.push("Weight-loss plans should be set up and monitored with your vet. Never fast a cat: rapid loss risks hepatic lipidosis.");
   }
@@ -100,7 +99,6 @@ export function feedingPlan(i: FeedingInput): FeedingPlan {
     wetCansPerDay: cans,
     wetGramsPerDay: cans !== null ? cans * canG : null,
     perMealKcal: kcal / Math.max(1, i.mealsPerDay),
-    waterMlPerDay: 50 * target, // ~50 ml/kg/day total water, including the water in wet food
     weightLoss, notes,
   };
 }
