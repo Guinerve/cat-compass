@@ -138,7 +138,7 @@ function Health({ cat }: { cat: CatProfile }) {
       <h2>Health for {cat.name || "your cat"} <small>({lifeStage(cat.ageMonths).replace("-", " ")})</small></h2>
       <h3>Schedule</h3>
       <ul className="cards">{items.map((i) => <li key={i.title}><b>{i.title}</b><br />{i.when}<br /><small>{i.note} ({i.source})</small></li>)}</ul>
-      {breed && <><h3>Breed predispositions: {breed.name}</h3><p className="hint">Risks are tendencies, not diagnoses. Ask your vet which screening suits your cat.</p><ul>{breed.risks.map((r) => <li key={r}>{r}</li>)}</ul></>}
+      {breed && <><h3>Breed predispositions: {breed.name}</h3><p className="hint">Risks are tendencies, not diagnoses. Ask your vet which screening suits your cat. Sources: consumer genetics and pet-health sites (Wisdom Panel, PetMD, Tufts Catnip), not a veterinary reference, so confirm with your vet.</p>{breed.risks.length ? <ul>{breed.risks.map((r) => <li key={r}>{r}</li>)}</ul> : <p>No breed-specific risks are listed for this breed yet (none have been verified). Every cat benefits from regular dental checks and weight monitoring.</p>}</>}
       {cat.region === "act" && (
         <div className="callout"><b>ACT rules{act.verified ? "" : " (unverified)"}.</b> {act.note}<ul>{act.items.map((i) => <li key={i}>{i}</li>)}</ul><small>Source: {act.source}</small></div>
       )}

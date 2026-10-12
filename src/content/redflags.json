@@ -32,14 +32,14 @@
   "title": "Dog flea or tick product containing permethrin",
   "signs": "Tremors, twitching, drooling, seizures after contact with a treated dog or product.",
   "action": "Emergency: contact a vet or the Animal Poisons Helpline now. Never use dog spot-ons on cats.",
-  "source": "RSPCA Australia"
+  "source": "Australian vet clinic guidance (some dog tick/flea products contain permethrin, which can kill cats); not yet verified against RSPCA/AVA"
  },
  {
   "id": "paralysis-tick",
   "title": "Paralysis tick signs (east coast)",
-  "signs": "Wobbly back legs, vomiting, change in voice, laboured breathing, found a tick.",
-  "action": "Emergency: see a vet at once, even if you cannot find the tick.",
-  "source": "Australian Veterinary Association"
+  "signs": "Often subtle in cats: hiding, reluctance to jump, a changed or absent meow. Then wobbly or weak back legs, gagging or noisy breathing, vomiting. Signs can appear or worsen for 24–48 hours after a tick is removed.",
+  "action": "Emergency: see a vet at once, even if you cannot find a tick. Tick paralysis can progress to breathing failure.",
+  "source": "RSPCA Queensland; MSD Veterinary Manual (tick paralysis); Australian vet clinic guidance"
  },
  {
   "id": "toxins",

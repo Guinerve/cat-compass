@@ -1,13 +1,82 @@
 [
-  { "id": "dsh", "name": "Domestic short hair", "coat": "short", "risks": ["Dental disease", "Obesity (especially after desexing)", "Chronic kidney disease in older cats", "Hyperthyroidism in older cats"] },
-  { "id": "dlh", "name": "Domestic long hair", "coat": "long", "risks": ["Dental disease", "Matting and hairballs", "Obesity", "Chronic kidney disease in older cats"] },
-  { "id": "persian", "name": "Persian", "coat": "long", "risks": ["Polycystic kidney disease (PKD)", "Brachycephalic airway and eye problems", "Tear staining and eye infections", "Matting"] },
-  { "id": "maine-coon", "name": "Maine Coon", "coat": "long", "risks": ["Hypertrophic cardiomyopathy (HCM)", "Hip dysplasia", "Spinal muscular atrophy"] },
-  { "id": "ragdoll", "name": "Ragdoll", "coat": "long", "risks": ["Hypertrophic cardiomyopathy (HCM)", "Bladder stones"] },
-  { "id": "siamese", "name": "Siamese / Oriental", "coat": "short", "risks": ["Dental disease", "Feline asthma", "Amyloidosis", "Progressive retinal atrophy"] },
-  { "id": "bengal", "name": "Bengal", "coat": "short", "risks": ["Hypertrophic cardiomyopathy (HCM)", "Progressive retinal atrophy", "Pyruvate kinase deficiency"] },
-  { "id": "british-shorthair", "name": "British Shorthair", "coat": "short", "risks": ["Hypertrophic cardiomyopathy (HCM)", "PKD", "Obesity"] },
-  { "id": "burmese", "name": "Burmese", "coat": "short", "risks": ["Diabetes mellitus", "Hypokalaemia", "Flat-faced skull malformation in some lines"] },
-  { "id": "abyssinian", "name": "Abyssinian", "coat": "short", "risks": ["Progressive retinal atrophy", "Renal amyloidosis", "Dental disease"] },
-  { "id": "sphynx", "name": "Sphynx", "coat": "none", "risks": ["Hypertrophic cardiomyopathy (HCM)", "Skin oiliness and sunburn", "Dental disease"] }
+ {
+  "id": "dsh",
+  "name": "Domestic short hair",
+  "coat": "short",
+  "risks": []
+ },
+ {
+  "id": "dlh",
+  "name": "Domestic long hair",
+  "coat": "long",
+  "risks": []
+ },
+ {
+  "id": "persian",
+  "name": "Persian",
+  "coat": "long",
+  "risks": [
+   "Polycystic kidney disease (PKD): a known genetic condition, most common in Persians and related breeds",
+   "Hypertrophic cardiomyopathy (HCM) is reported in the breed"
+  ]
+ },
+ {
+  "id": "maine-coon",
+  "name": "Maine Coon",
+  "coat": "long",
+  "risks": [
+   "Hypertrophic cardiomyopathy (HCM): a known gene mutation, with a genetic test available"
+  ]
+ },
+ {
+  "id": "ragdoll",
+  "name": "Ragdoll",
+  "coat": "long",
+  "risks": [
+   "Hypertrophic cardiomyopathy (HCM): a known gene mutation, with a genetic test available"
+  ]
+ },
+ {
+  "id": "siamese",
+  "name": "Siamese / Oriental",
+  "coat": "short",
+  "risks": []
+ },
+ {
+  "id": "bengal",
+  "name": "Bengal",
+  "coat": "short",
+  "risks": [
+   "Hypertrophic cardiomyopathy (HCM) is reported in the breed; the responsible gene has not been identified"
+  ]
+ },
+ {
+  "id": "british-shorthair",
+  "name": "British Shorthair",
+  "coat": "short",
+  "risks": [
+   "Hypertrophic cardiomyopathy (HCM) is reported in the breed",
+   "Polycystic kidney disease (PKD) is reported in the breed"
+  ]
+ },
+ {
+  "id": "burmese",
+  "name": "Burmese",
+  "coat": "short",
+  "risks": [
+   "Diabetes mellitus: a significantly higher incidence than other breeds"
+  ]
+ },
+ {
+  "id": "abyssinian",
+  "name": "Abyssinian",
+  "coat": "short",
+  "risks": []
+ },
+ {
+  "id": "sphynx",
+  "name": "Sphynx",
+  "coat": "none",
+  "risks": []
+ }
 ]

@@ -52,7 +52,9 @@ Review fixes: invalid weight/age/BCS/meals now show a message instead of `NaN kc
 
 **Also verified (2026-10-13, via search results, not primary papers):** lily toxicity (RSPCA Australia, International Cat Care: all parts including pollen and vase water; kidney failure within days), "not eating for a day: see a vet that day" and the fatty-liver risk (a Sydney vet clinic's triage guidance), and the **0.5–2 % per week** safe weight-loss range (AAHA range as cited by Tufts and a veterinary review; the app uses 1 %). Two claims with no source were **removed**: a "fatal within 24–48 hours" timeframe for urinary blockage, and a 50 ml/kg/day water target.
 
-**Still unverified:** the urinary-blockage, breathing, permethrin, paralysis-tick, toxin and hind-limb items (reasonable, widely stated, but I have not read a source for each); breed predispositions; parasite-prevention advice; the "about 10 % per BCS point above 5" ideal-weight estimate. Do not present those as sourced.
+**Also verified (2026-10-13, via search results, not primary papers):** paralysis-tick signs, including that they are often subtle in cats (RSPCA Queensland, MSD Veterinary Manual, clinic guidance); that some dog tick/flea products contain permethrin which can kill cats (clinic guidance); and breed links for HCM (Maine Coon, Ragdoll, with others reported), PKD (Persian, British Shorthair) and diabetes (Burmese), from consumer genetics and pet-health sites rather than a veterinary reference. **Removed because unsupported or inconsistent:** risk lists for Siamese, Abyssinian and Sphynx, Ragdoll bladder stones, Burmese hypokalaemia, generic domestic-cat risks, and a fixed worming schedule (published schedules disagree, so the app now gives a range and defers to your vet).
+
+**Still unverified:** the breathing, toxin and hind-limb red flags (reasonable, widely stated, no source read); the vaccine/parasite product advice beyond what is above; the "about 10 % per BCS point above 5" ideal-weight estimate. Do not present those as sourced.
 
 Sources are named per item in `src/content/*.json` (WSAVA, AAFP / ISFM, RSPCA Australia, Cornell Feline Health Center, AVA) but not yet linked to specific pages.
 
@@ -68,7 +70,7 @@ Checked in real Chrome (headless, driven with puppeteer) on 2026-10-12: the prof
 
 ## Next (tomorrow)
 
-- Verify the remaining items listed above as unverified (breed risks, parasite advice, the BCS ideal-weight estimate, the other red flags). Add real URLs per item.
+- Verify the few items listed above as unverified, and replace the consumer-site breed sources with a veterinary reference. Add real URLs per item.
 - BCS illustrations; stepped wizard if it feels better.
 
 ## Stretch

@@ -32,8 +32,8 @@ export function healthSchedule(p: { ageMonths: number; lifestyle: Lifestyle; reg
   }
   items.push({
     title: "Intestinal worming",
-    when: kitten ? "Every 2 weeks until 12 weeks, then monthly until 6 months" : "Every 3 months for adults",
-    note: "Use a cat-safe product at the right dose for current weight.", source: "ESCCAP / RSPCA Australia",
+    when: kitten ? "Frequently while young (commonly every 2–4 weeks until about 6 months)" : "Commonly every 1–3 months, depending on exposure (indoor cats lower, hunters higher)",
+    note: "Published schedules differ between sources and products. Your vet will set the interval. Use a cat-safe product at the right dose for current weight.", source: "Varies by source; confirm with your vet",
   });
   items.push({
     title: "Flea control",
