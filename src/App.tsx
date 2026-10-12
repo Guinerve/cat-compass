@@ -98,6 +98,7 @@ function Profile({ cat, update }: { cat: CatProfile; update: Upd }) {
       <label>Known health conditions<textarea value={cat.conditions} onChange={(e) => update({ conditions: e.target.value })} placeholder="e.g. kidney disease, diabetes" /></label>
       {cat.conditions.trim() && <p className="callout">Because {cat.name || "your cat"} has noted health conditions, check every feeding and routine suggestion with your vet.</p>}
       <label className="check"><input type="checkbox" checked={cat.weightLossMode} onChange={(e) => update({ weightLossMode: e.target.checked })} /> Weight-loss mode</label>
+      {cat.weightLossMode && <label>Target weight (kg), set with your vet<input type="number" step="0.1" min={0} value={cat.targetWeightKg || ""} placeholder="e.g. 4.5" onChange={(e) => update({ targetWeightKg: num(e.target.value, 0) })} /></label>}
     </section>
   );
 }
@@ -105,7 +106,7 @@ function Profile({ cat, update }: { cat: CatProfile; update: Upd }) {
 function Feeding({ cat, update }: { cat: CatProfile; update: Upd }) {
   const plan = useMemo(() => feedingPlan({
     weightKg: cat.weightKg, bcs: cat.bcs, ageMonths: cat.ageMonths, desexed: cat.desexed, activity: cat.activity,
-    weightLossMode: cat.weightLossMode, dryKcalPerKg: cat.dryKcalPerKg, wetKcalPerCan: cat.wetKcalPerCan,
+    weightLossMode: cat.weightLossMode, targetWeightKg: cat.targetWeightKg, dryKcalPerKg: cat.dryKcalPerKg, wetKcalPerCan: cat.wetKcalPerCan,
     wetCanGrams: cat.wetCanGrams, wetShare: cat.wetShare, mealsPerDay: cat.mealsPerDay,
   }), [cat]);
   const problems = feedingProblems(cat);
@@ -193,7 +194,7 @@ function Fridge({ cat }: { cat: CatProfile }) {
   if (problems.length) return <section className="fridge"><p className="callout" role="alert">The fridge sheet needs valid details first. {problems.join(" ")}</p></section>;
   const plan = feedingPlan({
     weightKg: cat.weightKg, bcs: cat.bcs, ageMonths: cat.ageMonths, desexed: cat.desexed, activity: cat.activity,
-    weightLossMode: cat.weightLossMode, dryKcalPerKg: cat.dryKcalPerKg, wetKcalPerCan: cat.wetKcalPerCan,
+    weightLossMode: cat.weightLossMode, targetWeightKg: cat.targetWeightKg, dryKcalPerKg: cat.dryKcalPerKg, wetKcalPerCan: cat.wetKcalPerCan,
     wetCanGrams: cat.wetCanGrams, wetShare: cat.wetShare, mealsPerDay: cat.mealsPerDay,
   });
   return (

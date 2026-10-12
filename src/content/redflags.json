@@ -18,7 +18,7 @@
   "title": "Open-mouth or laboured breathing",
   "signs": "Panting at rest, open mouth, belly heaving, blue or pale gums.",
   "action": "Emergency: keep the cat calm and go to a vet or emergency clinic now.",
-  "source": "Cornell Feline Health Center"
+  "source": "Widely stated emergency sign; no specific source read yet"
  },
  {
   "id": "lilies",
@@ -44,15 +44,15 @@
  {
   "id": "toxins",
   "title": "Swallowed a human medicine or toxin",
-  "signs": "Paracetamol, ibuprofen, antifreeze, rat bait, or chewed unknown plants.",
+  "signs": "Paracetamol or ibuprofen (cats are especially sensitive to paracetamol), antifreeze, rat bait, or chewed unknown plants.",
   "action": "Emergency: call a vet or the Animal Poisons Helpline immediately. Do not induce vomiting unless a vet tells you to.",
-  "source": "RSPCA Australia"
+  "source": "Australian Veterinary Association warning on human pain killers; SASH vet guidance (via search)"
  },
  {
   "id": "hindlimb",
   "title": "Sudden hind-leg weakness or pain",
-  "signs": "Dragging back legs, crying out, cold paws. Can be a blood clot linked to heart disease.",
-  "action": "Emergency: see a vet immediately.",
-  "source": "International Cat Care (ISFM)"
+  "signs": "Sudden loss of use of one or both back legs, crying out, signs of pain. Can be a blood clot (aortic thromboembolism), often a complication of heart disease.",
+  "action": "Emergency: contact your vet immediately and be ready to go now.",
+  "source": "Veterinary clinic guidance and a feline aortic thromboembolism case report (via search); not a primary reference"
  }
 ]

@@ -35,12 +35,12 @@ Dev server binds to `0.0.0.0` on port **5195** so it's reachable over Tailscale 
 ```bash
 npm install
 npm run dev      # http://0.0.0.0:5195
-npm test         # 23 tests
+npm test         # 24 tests
 ```
 
 ## How I know it's right
 
-23 unit tests pass (`src/feeding.test.ts`, `src/health.test.ts`).
+24 unit tests pass (`src/feeding.test.ts`, `src/health.test.ts`).
 
 Review fixes: invalid weight/age/BCS/meals now show a message instead of `NaN kcal` (including on the printed fridge sheet); corrupt saved data is backed up and reported, not silently replaced; a failed save shows a warning; an error boundary replaces a blank page.
 
@@ -54,7 +54,9 @@ Review fixes: invalid weight/age/BCS/meals now show a message instead of `NaN kc
 
 **Also verified (2026-10-13, via search results, not primary papers):** paralysis-tick signs, including that they are often subtle in cats (RSPCA Queensland, MSD Veterinary Manual, clinic guidance); that some dog tick/flea products contain permethrin which can kill cats (clinic guidance); and breed links for HCM (Maine Coon, Ragdoll, with others reported), PKD (Persian, British Shorthair) and diabetes (Burmese), from consumer genetics and pet-health sites rather than a veterinary reference. **Removed because unsupported or inconsistent:** risk lists for Siamese, Abyssinian and Sphynx, Ragdoll bladder stones, Burmese hypokalaemia, generic domestic-cat risks, and a fixed worming schedule (published schedules disagree, so the app now gives a range and defers to your vet).
 
-**Still unverified:** the breathing, toxin and hind-limb red flags (reasonable, widely stated, no source read); the vaccine/parasite product advice beyond what is above; the "about 10 % per BCS point above 5" ideal-weight estimate. Do not present those as sourced.
+**Also verified / corrected (2026-10-13):** sudden hind-leg loss as an emergency (aortic thromboembolism) and paracetamol/ibuprofen toxicity (AVA and an emergency-vet guide, via search). **Removed:** the "about 10 % per BCS point" ideal-weight formula. A study I found shows body fat per BCS point is not uniform (inactive neutered cats averaged 32 % body fat at BCS 5), and I found no source for any weight conversion. Weight-loss mode now needs a **target weight set with your vet** (AAHA says to base the plan on ideal weight) and gives no plan, only an explanation, without one.
+
+**Still unverified:** open-mouth breathing as a red flag (universally treated as an emergency, but I read no source for it) and the "go to a vet now" wording on the other red flags. Everything else in the app is either sourced above or has been removed. All sources came from search results, not primary papers or guideline documents (except AAHA Box 1 and the ACT page, which I read directly).
 
 Sources are named per item in `src/content/*.json` (WSAVA, AAFP / ISFM, RSPCA Australia, Cornell Feline Health Center, AVA) but not yet linked to specific pages.
 

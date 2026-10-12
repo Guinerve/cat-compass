@@ -18,6 +18,8 @@ export interface FeedingInput {
   desexed: boolean;
   activity: Activity;
   weightLossMode: boolean;
+  /** Target (ideal) weight in kg, set with your vet. Weight-loss mode needs it; there is no formula for it here. */
+  targetWeightKg?: number;
   /** kcal metabolisable energy per kg of food (dry) */
   dryKcalPerKg?: number;
   /** kcal per 85 g can, or per-can energy with canGrams */
@@ -45,13 +47,6 @@ export function stageFactor(input: Pick<FeedingInput, "ageMonths" | "desexed" | 
   return input.activity === "high" ? hi : lo;
 }
 
-/** Estimate ideal weight: roughly 10% of body weight per BCS point above 5, 5% per point below. */
-export function idealWeightKg(weightKg: number, bcs: number): number {
-  if (bcs > 5) return weightKg / (1 + 0.1 * (bcs - 5));
-  if (bcs < 5) return weightKg / (1 - 0.05 * (5 - bcs));
-  return weightKg;
-}
-
 export interface FeedingPlan {
   rer: number;
   factor: number;
@@ -68,8 +63,9 @@ export interface FeedingPlan {
 export function feedingPlan(i: FeedingInput): FeedingPlan {
   const notes: string[] = [];
   const stage = lifeStage(i.ageMonths);
-  const target = i.weightLossMode && i.bcs > 5 && stage !== "kitten-young" && stage !== "kitten-older"
-    ? idealWeightKg(i.weightKg, i.bcs) : i.weightKg;
+  const growing = stage === "kitten-young" || stage === "kitten-older";
+  const target = i.weightLossMode && !growing && i.targetWeightKg && i.targetWeightKg > 0 && i.targetWeightKg < i.weightKg
+    ? i.targetWeightKg : i.weightKg;
   const losing = target < i.weightKg;
   const base = rer(target);
   const factor = losing ? 0.8 : stageFactor(i);
@@ -88,7 +84,7 @@ export function feedingPlan(i: FeedingInput): FeedingPlan {
     weightLoss = { weeklyLossKg: cap, weeksToTarget: Math.ceil((i.weightKg - target) / cap) };
     notes.push("Weight-loss plans should be set up and monitored with your vet. Never fast a cat: rapid loss risks hepatic lipidosis.");
   }
-  if (i.weightLossMode && i.bcs <= 5) notes.push("Body condition looks ideal or lean, so no weight-loss target was applied.");
+  if (i.weightLossMode && !growing && !losing) notes.push("Weight-loss mode needs a target weight below the current weight. Ask your vet to set one; no estimate is made here because body condition scores don't convert reliably to a weight.");
   if (i.bcs <= 3) notes.push("This cat looks underweight. Check with your vet before changing food.");
   if (stage === "kitten-young" || stage === "kitten-older") notes.push("Kittens grow fast: reweigh weekly and adjust. Use kitten-formulated food.");
   notes.push("These are starting amounts. Adjust against body condition and weight every 2–4 weeks, and follow the feeding guide on your food if your vet advises otherwise.");

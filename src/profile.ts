@@ -20,12 +20,14 @@ export interface CatProfile {
   wetShare: number;
   mealsPerDay: number;
   weightLossMode: boolean;
+  /** 0 = not set. Set with your vet. */
+  targetWeightKg: number;
 }
 
 export const newCat = (): CatProfile => ({
   id: crypto.randomUUID(), name: "My cat", ageMonths: 36, breedId: "dsh", weightKg: 4.2, bcs: 5, sex: "female",
   desexed: true, lifestyle: "indoor", region: "act", activity: "normal", conditions: "",
-  dryKcalPerKg: 3800, wetKcalPerCan: 80, wetCanGrams: 85, wetShare: 0.5, mealsPerDay: 2, weightLossMode: false,
+  dryKcalPerKg: 3800, wetKcalPerCan: 80, wetCanGrams: 85, wetShare: 0.5, mealsPerDay: 2, weightLossMode: false, targetWeightKg: 0,
 });
 
 export const BCS_DESCRIPTIONS: Record<number, string> = {

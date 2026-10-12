@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { feedingPlan, feedingProblems, idealWeightKg, lifeStage, rer, stageFactor, type FeedingInput } from "./feeding";
+import { feedingPlan, feedingProblems, lifeStage, rer, stageFactor, type FeedingInput } from "./feeding";
 
 const base: FeedingInput = {
   weightKg: 4, bcs: 5, ageMonths: 36, desexed: true, activity: "normal",
@@ -55,19 +55,24 @@ describe("feeding plan worked examples", () => {
     expect(p.wetGramsPerDay!).toBeCloseTo(126.2, 0);
   });
 
-  it("weight-loss mode feeds RER×0.8 for the ideal weight", () => {
-    // 6 kg at BCS 7 → ideal 6/1.2 = 5 kg; RER(5)=234.0; ×0.8 = 187.2 kcal
-    expect(idealWeightKg(6, 7)).toBeCloseTo(5, 6);
-    const p = feedingPlan({ ...base, weightKg: 6, bcs: 7, weightLossMode: true });
-    expect(p.targetWeightKg).toBeCloseTo(5, 6);
+  it("weight-loss mode feeds RER×0.8 for the vet-set target weight (AAHA: base it on ideal weight)", () => {
+    const p = feedingPlan({ ...base, weightKg: 6, bcs: 7, weightLossMode: true, targetWeightKg: 5 });
+    expect(p.targetWeightKg).toBe(5);
     expect(p.kcalPerDay).toBeCloseTo(0.8 * rer(5), 6);
     expect(p.weightLoss!.weeklyLossKg).toBeCloseTo(0.06, 6);
     expect(p.weightLoss!.weeksToTarget).toBe(17);
   });
 
+  it("without a target weight there is no weight-loss plan and the user is told why", () => {
+    const p = feedingPlan({ ...base, weightKg: 6, bcs: 7, weightLossMode: true });
+    expect(p.weightLoss).toBeUndefined();
+    expect(p.kcalPerDay).toBeCloseTo(237.59 * Math.pow(6 / 4, 0.75), 0);
+    expect(p.notes.join(" ")).toMatch(/target weight/i);
+  });
+
   it("never applies weight loss to an ideal-weight cat or a kitten", () => {
-    expect(feedingPlan({ ...base, weightLossMode: true }).weightLoss).toBeUndefined();
-    expect(feedingPlan({ ...base, ageMonths: 6, bcs: 7, weightLossMode: true }).weightLoss).toBeUndefined();
+    expect(feedingPlan({ ...base, weightLossMode: true, targetWeightKg: 4 }).weightLoss).toBeUndefined();
+    expect(feedingPlan({ ...base, ageMonths: 6, bcs: 7, weightLossMode: true, targetWeightKg: 3 }).weightLoss).toBeUndefined();
   });
 
   it("returns null amounts when food energy is unknown", () => {
