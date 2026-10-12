@@ -16,9 +16,9 @@
  {
   "id": "breathing",
   "title": "Open-mouth or laboured breathing",
-  "signs": "Panting at rest, open mouth, belly heaving, blue or pale gums.",
-  "action": "Emergency: keep the cat calm and go to a vet or emergency clinic now.",
-  "source": "Widely stated emergency sign; no specific source read yet"
+  "signs": "Open-mouth breathing or panting that doesn't settle within a few minutes, laboured or gasping breathing, belly heaving, pale, blue or grey gums. Cats rarely pant; brief panting after intense play or a car ride can pass.",
+  "action": "Emergency: keep the cat calm and cool, don't restrain it, call ahead and go to a vet or emergency clinic now.",
+  "source": "Veterinary clinic guidance (GSVS, WebVet symptom checker), via search"
  },
  {
   "id": "lilies",

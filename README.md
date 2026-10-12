@@ -56,7 +56,7 @@ Review fixes: invalid weight/age/BCS/meals now show a message instead of `NaN kc
 
 **Also verified / corrected (2026-10-13):** sudden hind-leg loss as an emergency (aortic thromboembolism) and paracetamol/ibuprofen toxicity (AVA and an emergency-vet guide, via search). **Removed:** the "about 10 % per BCS point" ideal-weight formula. A study I found shows body fat per BCS point is not uniform (inactive neutered cats averaged 32 % body fat at BCS 5), and I found no source for any weight conversion. Weight-loss mode now needs a **target weight set with your vet** (AAHA says to base the plan on ideal weight) and gives no plan, only an explanation, without one.
 
-**Still unverified:** open-mouth breathing as a red flag (universally treated as an emergency, but I read no source for it) and the "go to a vet now" wording on the other red flags. Everything else in the app is either sourced above or has been removed. All sources came from search results, not primary papers or guideline documents (except AAHA Box 1 and the ACT page, which I read directly).
+**Every red flag now has a named source** (the open-mouth-breathing flag was the last: veterinary clinic guidance via search). **All red-flag, breed and parasite sources are search results, mostly clinic and consumer pages, not primary guidelines**; the only primary documents I read are AAHA 2021 Box 1 and the ACT Government page. Treat the content as "checked against reasonable public sources", not as peer-reviewed, and have a vet review it before real people rely on it.
 
 Sources are named per item in `src/content/*.json` (WSAVA, AAFP / ISFM, RSPCA Australia, Cornell Feline Health Center, AVA) but not yet linked to specific pages.
 
@@ -72,7 +72,7 @@ Checked in real Chrome (headless, driven with puppeteer) on 2026-10-12: the prof
 
 ## Next (tomorrow)
 
-- Verify the few items listed above as unverified, and replace the consumer-site breed sources with a veterinary reference. Add real URLs per item.
+- Replace the clinic and consumer-site sources with veterinary references (WSAVA/AAFP/ISFM guidelines) and add a real URL per item; get a vet to review the whole app.
 - BCS illustrations; stepped wizard if it feels better.
 
 ## Stretch
