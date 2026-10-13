@@ -1,0 +1,71 @@
+name: Desktop release
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+permissions:
+  contents: read
+concurrency:
+  group: desktop-release-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  package:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: macos-latest, platform: mac, arch: arm64, name: mac-arm64 }
+          - { os: macos-latest, platform: mac, arch: x64, name: mac-x64 }
+          - { os: windows-latest, platform: win, arch: x64, name: win-x64 }
+          - { os: ubuntu-latest, platform: linux, arch: x64, name: linux-x64 }
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - name: Verify tag matches the package version
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: bash
+        run: test "$GITHUB_REF_NAME" = "v$(node -p "require('./package.json').version")"
+      - run: npm ci
+      - run: npm test
+      - run: npm run desktop:dist -- --${{ matrix.platform }} --${{ matrix.arch }} --publish never
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: "false"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cat-compass-${{ matrix.name }}
+          path: |
+            release/Cat-Compass-*.dmg
+            release/Cat-Compass-*.zip
+            release/Cat-Compass-*.exe
+            release/Cat-Compass-*.AppImage
+          if-no-files-found: error
+          retention-days: 14
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cat-compass-*
+          path: release
+          merge-multiple: true
+      - run: npm run release:checksums
+      - name: Upload to a draft GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          if ! gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release create "$RELEASE_TAG" --verify-tag --draft --title "Cat Compass ${RELEASE_TAG#v} · early access" --notes-file "docs/releases/${RELEASE_TAG#v}.md"
+          fi
+          gh release upload "$RELEASE_TAG" release/Cat-Compass-* release/SHA256SUMS.txt --clobber

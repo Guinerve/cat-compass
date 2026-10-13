@@ -1,82 +1,13 @@
 [
- {
-  "id": "dsh",
-  "name": "Domestic short hair",
-  "coat": "short",
-  "risks": []
- },
- {
-  "id": "dlh",
-  "name": "Domestic long hair",
-  "coat": "long",
-  "risks": []
- },
- {
-  "id": "persian",
-  "name": "Persian",
-  "coat": "long",
-  "risks": [
-   "Polycystic kidney disease (PKD): a known genetic condition, most common in Persians and related breeds",
-   "Hypertrophic cardiomyopathy (HCM) is reported in the breed"
-  ]
- },
- {
-  "id": "maine-coon",
-  "name": "Maine Coon",
-  "coat": "long",
-  "risks": [
-   "Hypertrophic cardiomyopathy (HCM): a known gene mutation, with a genetic test available"
-  ]
- },
- {
-  "id": "ragdoll",
-  "name": "Ragdoll",
-  "coat": "long",
-  "risks": [
-   "Hypertrophic cardiomyopathy (HCM): a known gene mutation, with a genetic test available"
-  ]
- },
- {
-  "id": "siamese",
-  "name": "Siamese / Oriental",
-  "coat": "short",
-  "risks": []
- },
- {
-  "id": "bengal",
-  "name": "Bengal",
-  "coat": "short",
-  "risks": [
-   "Hypertrophic cardiomyopathy (HCM) is reported in the breed; the responsible gene has not been identified"
-  ]
- },
- {
-  "id": "british-shorthair",
-  "name": "British Shorthair",
-  "coat": "short",
-  "risks": [
-   "Hypertrophic cardiomyopathy (HCM) is reported in the breed",
-   "Polycystic kidney disease (PKD) is reported in the breed"
-  ]
- },
- {
-  "id": "burmese",
-  "name": "Burmese",
-  "coat": "short",
-  "risks": [
-   "Diabetes mellitus: a significantly higher incidence than other breeds"
-  ]
- },
- {
-  "id": "abyssinian",
-  "name": "Abyssinian",
-  "coat": "short",
-  "risks": []
- },
- {
-  "id": "sphynx",
-  "name": "Sphynx",
-  "coat": "none",
-  "risks": []
- }
+  { "id": "dsh", "name": "Domestic short hair", "coat": "short", "risks": [], "sourceIds": [] },
+  { "id": "dlh", "name": "Domestic long hair", "coat": "long", "risks": [], "sourceIds": [] },
+  { "id": "persian", "name": "Persian", "coat": "long", "risks": ["Polycystic kidney disease (PKD) is an inherited disorder most often seen in Persians.", "Hypertrophic cardiomyopathy (HCM) is more prevalent in this breed than in some others."], "sourceIds": ["cornell-pkd", "cornell-hcm"] },
+  { "id": "maine-coon", "name": "Maine Coon", "coat": "long", "risks": ["HCM risk is increased. A breed-associated variant can be tested. Ask your vet about genetic testing and heart screening; a negative genetic test does not rule out HCM."], "sourceIds": ["cornell-hcm", "hcm-genetics-primary-2013"] },
+  { "id": "ragdoll", "name": "Ragdoll", "coat": "long", "risks": ["HCM risk is increased. A breed-associated variant can be tested. Ask your vet about genetic testing and heart screening; a negative genetic test does not rule out HCM."], "sourceIds": ["cornell-hcm", "hcm-genetics-primary-2013"] },
+  { "id": "siamese", "name": "Siamese / Oriental", "coat": "short", "risks": ["Renal amyloidosis occurs more often in Oriental breeds. The source does not establish the same risk for every breed grouped under this profile option."], "sourceIds": ["cornell-amyloidosis"] },
+  { "id": "bengal", "name": "Bengal", "coat": "short", "risks": ["HCM is more prevalent in this breed. Ask your vet about suitable heart screening."], "sourceIds": ["cornell-hcm"] },
+  { "id": "british-shorthair", "name": "British Shorthair", "coat": "short", "risks": ["HCM is more prevalent in this breed.", "PKD is occasionally reported in British Shorthairs."], "sourceIds": ["cornell-hcm", "cornell-pkd"] },
+  { "id": "burmese", "name": "Burmese", "coat": "short", "risks": ["Diabetes risk is higher in Australian and European Burmese populations. The same increase was not reported for North American Burmese in the cited study."], "sourceIds": ["burmese-diabetes-primary-2020"] },
+  { "id": "abyssinian", "name": "Abyssinian", "coat": "short", "risks": ["Renal amyloidosis is rare but has a breed association with Abyssinians. Ask your vet about the significance for this cat."], "sourceIds": ["cornell-amyloidosis"] },
+  { "id": "sphynx", "name": "Sphynx", "coat": "none", "risks": ["HCM is more prevalent in this breed. A hands-on veterinary plan for heart screening is useful."], "sourceIds": ["cornell-hcm"] }
 ]

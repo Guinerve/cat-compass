@@ -1,24 +1,91 @@
 {
   "name": "cat-compass",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
+  "description": "Local cat care, feeding, records and reminders",
+  "author": "Cat Compass contributors",
+  "license": "MIT",
+  "main": "desktop/main.mjs",
+  "homepage": "https://guinerve.github.io/cat-compass/",
+  "repository": { "type": "git", "url": "https://github.com/Guinerve/cat-compass.git" },
+  "bugs": { "url": "https://github.com/Guinerve/cat-compass/issues" },
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0 --port 5195 --strictPort",
     "build": "tsc --noEmit && vite build",
-    "preview": "vite preview --host 0.0.0.0 --port 5195 --strictPort",
-    "test": "vitest run"
+    "preview": "vite preview --host 0.0.0.0 --port 5197 --strictPort",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "test:desktop": "node scripts/verify-desktop.mjs",
+    "desktop:dev": "electron . --dev",
+    "desktop": "npm run build && electron .",
+    "desktop:pack": "npm run build && electron-builder --dir",
+    "desktop:dist": "npm run build && electron-builder",
+    "downloads": "node scripts/serve-downloads.mjs",
+    "release:checksums": "node scripts/release-checksums.mjs",
+    "check": "npm test && npm run build && npm run test:e2e"
+  },
+  "build": {
+    "appId": "org.catcompass.desktop",
+    "productName": "Cat Compass",
+    "artifactName": "Cat-Compass-${version}-${os}-${arch}.${ext}",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "desktop/*.mjs",
+      "desktop/preload.cjs",
+      "!desktop/*.test.mjs",
+      "public/icon-*.png",
+      "LICENSE",
+      "THIRD_PARTY_NOTICES.md",
+      "package.json"
+    ],
+    "asar": true,
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "category": "public.app-category.lifestyle",
+      "icon": "public/cat-compass.icns"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "public/icon-512.png"
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "Utility",
+      "icon": "public/icon-512.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
   },
   "dependencies": {
+    "lucide-react": "^1.56.0",
+    "qrcode": "^1.5.4",
     "react": "^19.3.0",
     "react-dom": "^19.3.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.0",
+    "@types/qrcode": "^1.5.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
+    "electron": "^44.7.0",
+    "electron-builder": "^26.15.3",
     "typescript": "^7.0.2",
     "vite": "^8.3.4",
+    "vite-plugin-pwa": "^2.0.0",
     "vitest": "^5.0.4"
   }
 }

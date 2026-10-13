@@ -5,3 +5,7 @@ coverage/
 .env
 .DS_Store
 graphify-out/
+release/
+test-results/
+playwright-report/
+evidence/rea/

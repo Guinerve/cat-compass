@@ -15,11 +15,12 @@ describe("healthSchedule", () => {
     expect(has("indoor")).toBe(false);
     expect(has("enclosure")).toBe(false);
   });
-  it("adds paralysis tick prevention on the east coast only", () => {
+  it("does not treat ACT or other regions as tick-free", () => {
     const has = (r: "act" | "east-coast" | "other") =>
       healthSchedule({ ageMonths: 24, lifestyle: "indoor", region: r }).some((i) => i.title.includes("tick"));
     expect(has("east-coast")).toBe(true);
-    expect(has("other")).toBe(false);
+    expect(has("other")).toBe(true);
+    expect(has("act")).toBe(true);
   });
   it("check-up rhythm follows life stage", () => {
     const when = (age: number) => healthSchedule({ ageMonths: age, lifestyle: "indoor", region: "other" }).find((i) => /check/i.test(i.title))!.when;

@@ -1,216 +1,144 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import act from "./content/act.json";
-import breeds from "./content/breeds.json";
-import newowner from "./content/newowner.json";
-import redflags from "./content/redflags.json";
-import toys from "./content/toys.json";
-import { feedingPlan, feedingProblems, lifeStage } from "./feeding";
-import { dailyRoutine, healthSchedule, toothBrushingPlan } from "./health";
-import { BCS_DESCRIPTIONS, loadCats, newCat, saveCats, type CatProfile } from "./profile";
+import { useEffect, useState } from "react";
+import { ArrowUpRight, Bell, BookOpen, Cat, ChevronRight, CircleHelp, House, NotebookPen, Plus, Printer, ShieldCheck, Smartphone, Stethoscope, Utensils, type LucideIcon } from "lucide-react";
+import { feedingPlan, feedingProblems } from "./feeding";
+import { loadCats, newCat, saveCats, type CatProfile } from "./profile";
+import { completeReminder, loadCare, localDate, saveCare, type Backup, type CareData } from "./care";
+import { Feeding, Fridge, Health, NewOwner, Profile, Routine, RedFlagPanel } from "./components/CarePanels";
+import { Journal, Reminders, Connect } from "./components/Records";
+import { Library, Sources } from "./components/Library";
+import { CatArt } from "./components/CatArt";
 
-const TABS = ["Profile", "Feeding", "Health", "Routine", "Toys", "New owner", "Fridge sheet"] as const;
-type Tab = (typeof TABS)[number];
+const pages = [
+  ["Today", House], ["Profile", Cat], ["Feeding", Utensils], ["Health", Stethoscope],
+  ["Care journal", NotebookPen], ["Reminders", Bell], ["Care library", BookOpen],
+  ["New owner", CircleHelp], ["Care sheet", Printer], ["Phone & backup", Smartphone], ["Sources", ShieldCheck],
+] as const satisfies readonly (readonly [string, LucideIcon])[];
+export type Page = (typeof pages)[number][0];
 
 export function App() {
-  const loaded = useRef(loadCats()).current;
-  const [cats, setCats] = useState<CatProfile[]>(loaded.cats);
-  const [notice, setNotice] = useState<string | null>(loaded.problem);
-  const dirty = useRef(false); // do not overwrite stored data until the user actually changes something
-  const [sel, setSel] = useState(0);
-  const [tab, setTab] = useState<Tab>("Profile");
+  const [loaded] = useState(loadCats);
+  const [careLoaded] = useState(loadCare);
+  const [cats, setCats] = useState(loaded.cats);
+  const [care, setCare] = useState(careLoaded.care);
+  const [careDirty, setCareDirty] = useState(false);
+  const [notice, setNotice] = useState<string | null>(loaded.problem || careLoaded.problem);
+  const [selected, setSelected] = useState(cats[0]!.id);
+  const [page, setPage] = useState<Page>(() => location.hash.startsWith("#transfer=") ? "Phone & backup" : "Today");
+  const [transferToken, setTransferToken] = useState(() => location.hash.startsWith("#transfer=") ? location.hash.slice(10) : "");
   useEffect(() => {
-    if (!dirty.current) return;
-    if (!saveCats(cats)) setNotice("Changes can't be saved in this browser (private mode or storage full). They will be lost when you close the page.");
-  }, [cats]);
-  const cat = cats[Math.min(sel, cats.length - 1)]!;
-  const update = (patch: Partial<CatProfile>) => { dirty.current = true; setCats(cats.map((c) => (c.id === cat.id ? { ...c, ...patch } : c))); };
-
-  return (
-    <div className="app">
-      <header>
-        <h1>Cat Compass</h1>
-        <p>A care plan built around your cat. Nothing leaves your device.</p>
-        {notice && <p className="callout" role="alert">{notice}</p>}
-        <p className="disclaimer"><b>Not veterinary advice.</b> These are general guides. Check with your vet for anything that depends on your individual cat.</p>
-      </header>
-      <nav className="cats" aria-label="Cats">
-        {cats.map((c, i) => <button key={c.id} className={i === sel ? "on" : ""} onClick={() => setSel(i)}>{c.name || "Unnamed"}</button>)}
-        <button onClick={() => { dirty.current = true; const c = newCat(); setCats([...cats, c]); setSel(cats.length); setTab("Profile"); }}>+ Add cat</button>
-        {cats.length > 1 && <button onClick={() => { dirty.current = true; setCats(cats.filter((c) => c.id !== cat.id)); setSel(0); }}>Remove</button>}
-      </nav>
-      <nav className="tabs" role="tablist">
-        {TABS.map((t) => <button key={t} role="tab" aria-selected={t === tab} className={t === tab ? "on" : ""} onClick={() => setTab(t)}>{t}</button>)}
-      </nav>
-      <main>
-        <RedFlagPanel />
-        {tab === "Profile" && <Profile cat={cat} update={update} />}
-        {tab === "Feeding" && <Feeding cat={cat} update={update} />}
-        {tab === "Health" && <Health cat={cat} />}
-        {tab === "Routine" && <Routine cat={cat} />}
-        {tab === "Toys" && <Toys />}
-        {tab === "New owner" && <NewOwner cat={cat} />}
-        {tab === "Fridge sheet" && <Fridge cat={cat} />}
+    const receive = () => { if (location.hash.startsWith("#transfer=")) { setTransferToken(location.hash.slice(10)); setPage("Phone & backup"); } };
+    window.addEventListener("hashchange", receive); return () => window.removeEventListener("hashchange", receive);
+  }, []);
+  const cat = cats.find(c => c.id === selected) || cats[0]!;
+  const changeCats = (data: CatProfile[]) => { if (!saveCats(data)) setNotice("Profiles could not be saved. Export a backup before you close the app."); setCats(data); };
+  const update = (patch: Partial<CatProfile>) => changeCats(cats.map(c => c.id === cat.id ? { ...c, ...patch } : c));
+  const changeCare = (data: CareData) => {
+    // Persist a first-visit profile ID before saving its related care records.
+    if (!saveCats(cats) || !saveCare(data)) setNotice("Care records could not be saved. Export a backup before you close the app.");
+    setCareDirty(true); setCare(data);
+  };
+  useEffect(() => {
+    const desktop = window.catCompassDesktop;
+    if (!desktop) return;
+    // Do not replace a retained native schedule after a failed local-data load.
+    if (careLoaded.problem && !careDirty) return;
+    void desktop.setReminders(care.reminders.map(r => ({ ...r, catName: cats.find(c => c.id === r.catId)?.name || "Cat" })))
+      .then(ok => { if (!ok) setNotice("Desktop reminders could not be saved. Use calendar export as a backup."); })
+      .catch(() => setNotice("Desktop reminders are unavailable. Use calendar export."));
+  }, [care.reminders, cats, careDirty, careLoaded.problem]);
+  useEffect(() => {
+    if (window.catCompassDesktop) return;
+    const check = () => {
+      if (!("Notification" in window) || Notification.permission !== "granted") return;
+      for (const r of care.reminders) {
+        if (!r.enabled || Date.parse(r.due) > Date.now()) continue;
+        const key = `cat-compass:notified:${r.id}`;
+        try {
+          if (localStorage.getItem(key) === r.due) continue;
+          new Notification(`${cats.find(c => c.id === r.catId)?.name || "Cat"}: ${r.title}`, { body: "Open Cat Compass to complete this care task.", tag: r.id });
+          localStorage.setItem(key, r.due);
+        } catch { /* Browsers may require a service worker. Calendar export is available. */ }
+      }
+    };
+    check(); const timer = setInterval(check, 30000); return () => clearInterval(timer);
+  }, [care.reminders, cats]);
+  const restore = (backup: Backup) => {
+    if (!window.confirm(`Replace all local profiles and care records with ${backup.cats.length} imported cat(s)? Export a backup first.`)) return false;
+    // Roll back both stores on partial failure. In-memory state changes only after both writes succeed.
+    const keys = ["cat-compass:v1", "cat-compass:care:v2"];
+    try {
+      const old = keys.map(k => localStorage.getItem(k));
+      try {
+        localStorage.setItem(keys[0]!, JSON.stringify(backup.cats)); localStorage.setItem(keys[1]!, JSON.stringify(backup.care));
+      } catch (error) {
+        keys.forEach((k, i) => old[i] === null ? localStorage.removeItem(k) : localStorage.setItem(k, old[i]!)); throw error;
+      }
+    } catch { setNotice("Import could not be saved. Existing app data remains in memory. Check storage and keep your backup file."); return false; }
+    setCats(backup.cats); setCare(backup.care); setSelected(backup.cats[0]!.id); setCareDirty(true); setTransferToken(""); setNotice("Backup imported. Devices do not sync automatically."); return true;
+  };
+  const remove = () => {
+    if (cats.length < 2 || !window.confirm(`Remove ${cat.name} and their reminders, journal and checklists? This cannot be undone.`)) return;
+    const next = cats.filter(c => c.id !== cat.id);
+    changeCats(next); setSelected(next[0]!.id);
+    const checks = { ...care.checks }; delete checks[cat.id];
+    changeCare({ reminders: care.reminders.filter(r => r.catId !== cat.id), journal: care.journal.filter(r => r.catId !== cat.id), checks });
+  };
+  const complete = (id: string) => changeCare({ ...care, reminders: care.reminders.map(r => r.id === id ? completeReminder(r) : r) });
+  return <div className="workspace">
+    <a className="skip" href="#main">Skip to content</a>
+    <aside className="sidebar">
+      <a className="brand" href="#" onClick={e => { e.preventDefault(); setPage("Today"); }}><span className="brand-mark"><Cat size={25} /></span><span>cat compass<small>A little care, every day.</small></span></a>
+      <div className="rail-label">YOUR COMPANIONS</div>
+      <div className="cat-switch"><span className="avatar"><Cat /></span><label><span className="sr-only">Selected cat</span><select value={cat.id} onChange={e => setSelected(e.target.value)}>{cats.map(c => <option key={c.id} value={c.id}>{c.name || "Unnamed cat"}</option>)}</select><small>{cats.length} {cats.length === 1 ? "cat" : "cats"} in your care</small></label></div>
+      <button className="add-cat" onClick={() => { const c = { ...newCat(), name: "New cat" }; changeCats([...cats, c]); setSelected(c.id); setPage("Profile"); }}><Plus size={16} /> Add a cat</button>
+      <nav aria-label="Main navigation">{pages.map(([name, Icon], i) => <button key={name} className={`nav-item ${name === page ? "active" : ""} ${i === 6 ? "nav-break" : ""}`} aria-current={name === page ? "page" : undefined} onClick={() => setPage(name)}><Icon size={19} />{name}{name === page && <ChevronRight size={14} className="nav-arrow" />}</button>)}</nav>
+      <div className="rail-note"><ShieldCheck size={19} /><div>Local by default.<small>No account. No tracking. You choose what to share.</small></div></div>
+    </aside>
+    <div className="content">
+      <header className="topbar"><span>Your care space <ChevronRight size={14} /> <b>{page}</b></span><button className="quiet" onClick={() => setPage("Phone & backup")}><Smartphone size={16} /> Take care with you</button></header>
+      <main id="main" tabIndex={-1}>
+        {notice && <div className="callout" role="alert">{notice}<button className="quiet" aria-label="Dismiss notice" onClick={() => setNotice(null)}>Dismiss</button></div>}
+        <RedFlagPanel cat={cat} />
+        {page === "Today" ? <Today cat={cat} care={care} changeCare={changeCare} go={setPage} complete={complete} /> : <div className="page-heading"><p className="eyebrow">{["Care library", "Sources", "Phone & backup"].includes(page) ? "CAT COMPASS" : cat.name.toUpperCase() + "’S CARE"}</p><h1>{page}</h1><p>{pageDescriptions[page]}</p></div>}
+        {page === "Profile" && <Profile cat={cat} update={update} remove={cats.length > 1 ? remove : undefined} />}
+        {page === "Feeding" && <Feeding cat={cat} update={update} />}
+        {page === "Health" && <Health cat={cat} />}
+        {page === "Care journal" && <Journal key={cat.id} cat={cat} care={care} change={changeCare} update={update} />}
+        {page === "Reminders" && <Reminders key={cat.id} cat={cat} cats={cats} care={care} change={changeCare} complete={complete} />}
+        {page === "Care library" && <Library />}
+        {page === "New owner" && <NewOwner cat={cat} care={care} change={changeCare} />}
+        {page === "Care sheet" && <Fridge cat={cat} />}
+        {page === "Phone & backup" && <Connect cats={cats} cat={cat} care={care} restore={restore} incoming={transferToken} />}
+        {page === "Sources" && <Sources />}
       </main>
-      <footer>Energy factors: AAHA 2021 Nutrition and Weight Management Guidelines. Vaccines: WSAVA 2024. ACT rules: ACT Government. Other items cite WSAVA, AAFP / ISFM, RSPCA Australia, Cornell Feline Health Center and the AVA by name and are not yet individually verified.</footer>
+      <footer><ShieldCheck size={15} /><span>Care guidance, not a diagnosis. Your vet sets treatment, vaccine dates and special diets.</span><button className="text-button" onClick={() => setPage("Sources")}>Read the sources <ArrowUpRight size={13} /></button></footer>
     </div>
-  );
+  </div>;
 }
-
-function RedFlagPanel() {
-  return (
-    <details className="redflags">
-      <summary>⚠ Emergency signs: when to see a vet now</summary>
-      <ul>{redflags.map((r) => (
-        <li key={r.id}><b>{r.title}.</b> {r.signs} <em>{r.action}</em> <small>({r.source})</small></li>
-      ))}</ul>
-    </details>
-  );
-}
-
-type Upd = (p: Partial<CatProfile>) => void;
-const num = (v: string, d = 0) => (Number.isFinite(Number(v)) && v !== "" ? Number(v) : d);
-
-function Profile({ cat, update }: { cat: CatProfile; update: Upd }) {
-  const years = Math.floor(cat.ageMonths / 12), months = cat.ageMonths % 12;
-  return (
-    <section className="form">
-      <label>Name<input value={cat.name} onChange={(e) => update({ name: e.target.value })} /></label>
-      <fieldset><legend>Age</legend><span className="row">
-        <input aria-label="Years" type="number" min={0} max={30} value={years} onChange={(e) => update({ ageMonths: num(e.target.value) * 12 + months })} /> years
-        <input aria-label="Months" type="number" min={0} max={11} value={months} onChange={(e) => update({ ageMonths: years * 12 + num(e.target.value) })} /> months
-      </span></fieldset>
-      <label>Breed<select value={cat.breedId} onChange={(e) => update({ breedId: e.target.value })}>
-        {breeds.map((b) => <option key={b.id} value={b.id}>{b.name}</option>)}</select></label>
-      <label>Weight (kg)<input type="number" step="0.1" min={0.3} value={cat.weightKg} onChange={(e) => update({ weightKg: num(e.target.value, cat.weightKg) })} /></label>
-      <fieldset><legend>Body condition score (1–9)</legend>
-        <div className="bcs">{[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
-          <button key={n} type="button" className={n === cat.bcs ? "on" : ""} onClick={() => update({ bcs: n })} aria-pressed={n === cat.bcs}>{n}</button>))}</div>
-        <p className="hint">{BCS_DESCRIPTIONS[cat.bcs]}</p>
-      </fieldset>
-      <label>Sex<select value={cat.sex} onChange={(e) => update({ sex: e.target.value as CatProfile["sex"] })}><option value="female">Female</option><option value="male">Male</option></select></label>
-      <label className="check"><input type="checkbox" checked={cat.desexed} onChange={(e) => update({ desexed: e.target.checked })} /> Desexed</label>
-      <label>Lifestyle<select value={cat.lifestyle} onChange={(e) => update({ lifestyle: e.target.value as CatProfile["lifestyle"] })}>
-        <option value="indoor">Indoor only</option><option value="enclosure">Indoor + secure outdoor enclosure</option><option value="outdoor">Indoor / outdoor</option></select></label>
-      <label>Where do you live?<select value={cat.region} onChange={(e) => update({ region: e.target.value as CatProfile["region"] })}>
-        <option value="act">ACT</option><option value="east-coast">Eastern coast (tick area)</option><option value="other">Elsewhere in Australia</option></select></label>
-      <label>Activity<select value={cat.activity} onChange={(e) => update({ activity: e.target.value as CatProfile["activity"] })}>
-        <option value="low">Low / sedentary</option><option value="normal">Normal</option><option value="high">High</option></select></label>
-      <label>Known health conditions<textarea value={cat.conditions} onChange={(e) => update({ conditions: e.target.value })} placeholder="e.g. kidney disease, diabetes" /></label>
-      {cat.conditions.trim() && <p className="callout">Because {cat.name || "your cat"} has noted health conditions, check every feeding and routine suggestion with your vet.</p>}
-      <label className="check"><input type="checkbox" checked={cat.weightLossMode} onChange={(e) => update({ weightLossMode: e.target.checked })} /> Weight-loss mode</label>
-      {cat.weightLossMode && <label>Target weight (kg), set with your vet<input type="number" step="0.1" min={0} value={cat.targetWeightKg || ""} placeholder="e.g. 4.5" onChange={(e) => update({ targetWeightKg: num(e.target.value, 0) })} /></label>}
-    </section>
-  );
-}
-
-function Feeding({ cat, update }: { cat: CatProfile; update: Upd }) {
-  const plan = useMemo(() => feedingPlan({
-    weightKg: cat.weightKg, bcs: cat.bcs, ageMonths: cat.ageMonths, desexed: cat.desexed, activity: cat.activity,
-    weightLossMode: cat.weightLossMode, targetWeightKg: cat.targetWeightKg, dryKcalPerKg: cat.dryKcalPerKg, wetKcalPerCan: cat.wetKcalPerCan,
-    wetCanGrams: cat.wetCanGrams, wetShare: cat.wetShare, mealsPerDay: cat.mealsPerDay,
-  }), [cat]);
+const pageDescriptions: Record<Page, string> = {
+  Today: "", Profile: "The details that make their care personal.", Feeding: "From the food label to the bowl. Clear units and checked calculations.",
+  Health: "Prevention, early warning signs and questions for your vet.", "Care journal": "Keep weight, observations and vet visits in one place.",
+  Reminders: "Set dates from your vet or product label. Send them to your calendar.", "Care library": "Practical guides for life with a cat. Sources stay close to the advice.",
+  "New owner": "A calm start, a safe home and a checklist you can keep.", "Care sheet": "A simple handover for the fridge, a pet sitter or your vet.",
+  "Phone & backup": "Install the app. Move your records. Keep reminders on your phone.", Sources: "See where the advice comes from, what was checked and what remains uncertain.",
+};
+function Today({ cat, care, changeCare, go, complete }: { cat: CatProfile; care: CareData; changeCare: (c: CareData) => void; go: (p: Page) => void; complete: (id: string) => void }) {
   const problems = feedingProblems(cat);
-  if (problems.length) return <section className="form"><h2>Feeding for {cat.name || "your cat"}</h2><p className="callout" role="alert">{problems.join(" ")} Fix these on the Profile tab.</p></section>;
-  return (
-    <section className="form">
-      <h2>Feeding for {cat.name || "your cat"}</h2>
-      <label>Dry food energy (kcal per kg)<input type="number" value={cat.dryKcalPerKg} onChange={(e) => update({ dryKcalPerKg: num(e.target.value) })} /></label>
-      <label>Wet food energy (kcal per can)<input type="number" value={cat.wetKcalPerCan} onChange={(e) => update({ wetKcalPerCan: num(e.target.value) })} /></label>
-      <label>Can size (g)<input type="number" value={cat.wetCanGrams} onChange={(e) => update({ wetCanGrams: num(e.target.value, 85) })} /></label>
-      <label>Share of calories from wet food: {Math.round(cat.wetShare * 100)}%<input type="range" min={0} max={100} step={5} value={cat.wetShare * 100} onChange={(e) => update({ wetShare: Number(e.target.value) / 100 })} /></label>
-      <label>Meals per day<input type="number" min={1} max={6} value={cat.mealsPerDay} onChange={(e) => update({ mealsPerDay: num(e.target.value, 2) })} /></label>
-      <div className="result">
-        <p><b>{plan.kcalPerDay.toFixed(0)} kcal / day</b> <small>(RER {plan.rer.toFixed(0)} × {plan.factor})</small></p>
-        {plan.dryGramsPerDay !== null && <p>Dry: <b>{plan.dryGramsPerDay.toFixed(0)} g / day</b></p>}
-        {plan.wetCansPerDay !== null && cat.wetShare > 0 && <p>Wet: <b>{plan.wetCansPerDay.toFixed(2)} cans / day</b> (~{plan.wetGramsPerDay!.toFixed(0)} g)</p>}
-        <p>≈ {plan.perMealKcal.toFixed(0)} kcal per meal</p>
-        {plan.weightLoss && <p className="callout">Target weight {plan.targetWeightKg.toFixed(1)} kg. Aim to lose about {(plan.weightLoss.weeklyLossKg * 1000).toFixed(0)} g per week (~1% of body weight): roughly {plan.weightLoss.weeksToTarget} weeks. Weigh weekly.</p>}
-        {plan.notes.map((n, i) => <p className="hint" key={i}>{n}</p>)}
-      </div>
-    </section>
-  );
-}
-
-function Health({ cat }: { cat: CatProfile }) {
-  const breed = breeds.find((b) => b.id === cat.breedId);
-  const items = healthSchedule({ ageMonths: cat.ageMonths, lifestyle: cat.lifestyle, region: cat.region });
-  return (
-    <section>
-      <h2>Health for {cat.name || "your cat"} <small>({lifeStage(cat.ageMonths).replace("-", " ")})</small></h2>
-      <h3>Schedule</h3>
-      <ul className="cards">{items.map((i) => <li key={i.title}><b>{i.title}</b><br />{i.when}<br /><small>{i.note} ({i.source})</small></li>)}</ul>
-      {breed && <><h3>Breed predispositions: {breed.name}</h3><p className="hint">Risks are tendencies, not diagnoses. Ask your vet which screening suits your cat. Sources: consumer genetics and pet-health sites (Wisdom Panel, PetMD, Tufts Catnip), not a veterinary reference, so confirm with your vet.</p>{breed.risks.length ? <ul>{breed.risks.map((r) => <li key={r}>{r}</li>)}</ul> : <p>No breed-specific risks are listed for this breed yet (none have been verified). Every cat benefits from regular dental checks and weight monitoring.</p>}</>}
-      {cat.region === "act" && (
-        <div className="callout"><b>ACT rules{act.verified ? "" : " (unverified)"}.</b> {act.note}<ul>{act.items.map((i) => <li key={i}>{i}</li>)}</ul><small>Source: {act.source}</small></div>
-      )}
-    </section>
-  );
-}
-
-function Routine({ cat }: { cat: CatProfile }) {
-  const breed = breeds.find((b) => b.id === cat.breedId);
-  const blocks = dailyRoutine({ mealsPerDay: cat.mealsPerDay, coat: breed?.coat ?? "short", ageMonths: cat.ageMonths });
-  return (
-    <section>
-      <h2>Daily routine</h2>
-      <p className="hint">Play follows the cat's natural sequence: hunt → catch → eat → groom → sleep.</p>
-      <ol className="timeline">{blocks.map((b, i) => <li key={i}><span>{b.time}</span><b>{b.title}</b><br />{b.detail}</li>)}</ol>
-      <h3>Tooth-brushing in 2–3 weeks</h3>
-      <ol>{toothBrushingPlan.map((s) => <li key={s}>{s}</li>)}</ol>
-      <h3>Litter</h3>
-      <p>One tray per cat plus one extra, in quiet spots away from food and water. Scoop daily and wash the tray weekly with mild soap.</p>
-    </section>
-  );
-}
-
-function Toys() {
-  return (
-    <section>
-      <h2>Toys</h2>
-      <p className="callout">No unsupervised string, ribbon or elastic toys.</p>
-      <div className="grid">{toys.map((t) => (
-        <article key={t.id} className="card"><small>{t.kind === "diy" ? "DIY" : "Buy"}</small><h3>{t.name}</h3><p>{t.why}</p>
-          <ol>{t.how.map((h) => <li key={h}>{h}</li>)}</ol><p className="hint"><b>Safety:</b> {t.safety}</p></article>
-      ))}</div>
-    </section>
-  );
-}
-
-function NewOwner({ cat }: { cat: CatProfile }) {
-  return (
-    <section>
-      <h2>First month with {cat.name || "your cat"}</h2>
-      <h3>First week</h3><ul>{newowner.firstWeek.map((s) => <li key={s}>{s}</li>)}</ul>
-      <h3>Cat-proofing checklist</h3><ul className="checks">{newowner.proofing.map((s) => <li key={s}><label><input type="checkbox" /> {s}</label></li>)}</ul>
-      <h3>Things I wish I'd had</h3><ul>{newowner.wish.map((s) => <li key={s}>{s}</li>)}</ul>
-      <h3>Shopping list (rough costs)</h3>
-      <table><tbody>{newowner.shopping.map((s) => <tr key={s.item}><td>{s.item}</td><td>{s.cost}</td></tr>)}</tbody></table>
-    </section>
-  );
-}
-
-function Fridge({ cat }: { cat: CatProfile }) {
-  const problems = feedingProblems(cat);
-  if (problems.length) return <section className="fridge"><p className="callout" role="alert">The fridge sheet needs valid details first. {problems.join(" ")}</p></section>;
-  const plan = feedingPlan({
-    weightKg: cat.weightKg, bcs: cat.bcs, ageMonths: cat.ageMonths, desexed: cat.desexed, activity: cat.activity,
-    weightLossMode: cat.weightLossMode, targetWeightKg: cat.targetWeightKg, dryKcalPerKg: cat.dryKcalPerKg, wetKcalPerCan: cat.wetKcalPerCan,
-    wetCanGrams: cat.wetCanGrams, wetShare: cat.wetShare, mealsPerDay: cat.mealsPerDay,
-  });
-  return (
-    <section className="fridge">
-      <button className="noprint" onClick={() => window.print()}>Print</button>
-      <h2>{cat.name || "My cat"}</h2>
-      <p>{Math.floor(cat.ageMonths / 12)}y {cat.ageMonths % 12}m · {cat.weightKg} kg · BCS {cat.bcs}/9</p>
-      <h3>Daily food</h3>
-      <p>{plan.kcalPerDay.toFixed(0)} kcal across {cat.mealsPerDay} meals.
-        {plan.dryGramsPerDay !== null && ` Dry ${plan.dryGramsPerDay.toFixed(0)} g.`}
-        {plan.wetCansPerDay !== null && cat.wetShare > 0 && ` Wet ${plan.wetCansPerDay.toFixed(2)} cans.`}</p>
-      <h3>Emergency: go to a vet now</h3>
-      <ul>{redflags.slice(0, 5).map((r) => <li key={r.id}>{r.title}</li>)}</ul>
-      <h3>Daily</h3>
-      <ul><li>Fresh water, scoop litter</li><li>Two play sessions (10–15 min)</li><li>Brush coat</li></ul>
-      <p className="hint">Not veterinary advice. Check with your vet.</p>
-    </section>
-  );
+  const plan = !problems.length && cat.foodConfirmed ? feedingPlan(cat) : null;
+  const tasks = ["Fresh water", "Scoop litter", "Play together", "Check appetite & comfort"];
+  const today = localDate(); const done = care.checks[cat.id] || [];
+  const upcoming = care.reminders.filter(r => r.catId === cat.id && r.enabled).sort((a, b) => Date.parse(a.due) - Date.parse(b.due)).slice(0, 3);
+  return <>
+    <section className="hero"><div><p className="eyebrow">A GOOD DAY STARTS WITH A LITTLE CARE</p><h1>Life is better<br />with {cat.name || "your cat"}.</h1><p>Food, play, health and the small things.<br />Your cat’s care, all in one place.</p><button className="primary" onClick={() => go("Profile")}>Make it their own <ArrowUpRight size={16} /></button></div><CatArt /><span className="hero-note">Made for their everyday.</span></section>
+    <div className="section-heading"><div><p className="eyebrow">THE LITTLE THINGS ADD UP</p><h2>Today, at a glance</h2></div><span className="date-pill">{new Date().toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" })}</span></div>
+    <div className="stats-grid">
+      <button className="stat peach" onClick={() => go("Feeding")}><span className="stat-icon"><Utensils size={21} /></span><span className="eyebrow">DAILY FOOD</span><strong>{plan ? Math.round(plan.kcalPerDay) : "Set up"}<small>{plan ? "kcal / day" : "food labels"}</small></strong><span>{plan ? `${cat.mealsPerDay} meals · treats included` : problems.length ? "Check profile and food details" : "Confirm the label, not our example"}</span><ArrowUpRight className="stat-arrow" size={18} /></button>
+      <button className="stat sage" onClick={() => go("Care journal")}><span className="stat-icon"><NotebookPen size={21} /></span><span className="eyebrow">WEIGHT & WELLBEING</span><strong>{cat.weightKg}<small>kg</small></strong><span>BCS {cat.bcs}/9 · Keep a weight record</span><ArrowUpRight className="stat-arrow" size={18} /></button>
+      <button className="stat cream" onClick={() => go("Reminders")}><span className="stat-icon"><Bell size={21} /></span><span className="eyebrow">CARE REMINDERS</span><strong>{care.reminders.filter(r => r.catId === cat.id && r.enabled).length}<small>active</small></strong><span>Dates you set, not medical guesses</span><ArrowUpRight className="stat-arrow" size={18} /></button>
+    </div>
+    <div className="two-col"><section className="panel"><div className="section-heading"><h2>Small daily wins</h2><span className="badge">{tasks.filter(t => done.includes(`${today}:${t}`)).length} / {tasks.length}</span></div><p className="hint">A fresh checklist each day. No need for a perfect streak.</p><div className="task-list">{tasks.map(t => <label key={t} className="task"><input type="checkbox" checked={done.includes(`${today}:${t}`)} onChange={e => { const key = `${today}:${t}`; const kept = done.filter(x => x.startsWith("new:") || x.startsWith(today + ":")); changeCare({ ...care, checks: { ...care.checks, [cat.id]: e.target.checked ? [...kept, key] : kept.filter(x => x !== key) } }); }} /><span>{t}</span></label>)}</div></section>
+      <section className="panel"><div className="section-heading"><h2>Coming up</h2><button className="text-button" onClick={() => go("Reminders")}>View all <ChevronRight size={14} /></button></div>{upcoming.length ? upcoming.map(r => <div className="reminder-row" key={r.id}><Bell size={17} /><div><b>{r.title}</b><small>{Date.parse(r.due) < Date.now() ? "Overdue · " : ""}{new Date(r.due).toLocaleString()}</small></div><button className="quiet" onClick={() => complete(r.id)}>Done</button></div>) : <div className="empty"><Bell size={30} /><p>No reminders yet.</p><span>Add a weigh-in, play time or a vet-agreed care date.</span><button className="text-button" onClick={() => go("Reminders")}>Add your first reminder <Plus size={14} /></button></div>}</section></div>
+    <section className="library-banner"><BookOpen size={32} /><div><p className="eyebrow">UNDERSTAND YOUR CAT</p><h2>A guide for every stage of life.</h2><p>Settling in, feeding, play, health and the senior years.</p></div><button onClick={() => go("Care library")}>Explore the library <ArrowUpRight size={16} /></button></section>
+    <Routine cat={cat} compact />
+  </>;
 }

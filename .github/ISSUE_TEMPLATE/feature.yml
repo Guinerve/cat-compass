@@ -1,0 +1,16 @@
+name: Feature request
+description: Describe an owner task the app could support better.
+title: "[Feature]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: task
+    attributes: { label: Owner task, description: "What are you trying to do, and what stops you?" }
+    validations: { required: true }
+  - type: textarea
+    id: outcome
+    attributes: { label: Expected result, description: "Describe the outcome, not only a control or technology." }
+    validations: { required: true }
+  - type: textarea
+    id: limits
+    attributes: { label: Privacy, source or platform constraints, description: "Do not include real records." }

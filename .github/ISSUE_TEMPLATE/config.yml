@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability privately
+    url: https://github.com/Guinerve/cat-compass/security/advisories/new
+    about: Do not post an exploit or private records in a public issue.
+  - name: Read the care and emergency limits
+    url: https://github.com/Guinerve/cat-compass/blob/main/docs/sources-and-safety.md
+    about: Contact a veterinarian for an ill cat. GitHub is not an emergency service.

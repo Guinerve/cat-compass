@@ -1,0 +1,35 @@
+name: Bug report
+description: Report an app or installation defect using example records.
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: "Do not attach private backups, transfer links or real veterinary records. For a sick cat, contact a vet. For a security finding, use private vulnerability reporting."
+  - type: input
+    id: version
+    attributes: { label: Version, placeholder: "0.2.0" }
+    validations: { required: true }
+  - type: input
+    id: platform
+    attributes: { label: Computer or browser, placeholder: "macOS Apple Silicon desktop; Chrome on Android; web app…" }
+    validations: { required: true }
+  - type: textarea
+    id: steps
+    attributes: { label: Steps to reproduce, description: "Use synthetic cat details. Include the feature and each action." }
+    validations: { required: true }
+  - type: textarea
+    id: expected
+    attributes: { label: Expected result }
+    validations: { required: true }
+  - type: textarea
+    id: actual
+    attributes: { label: Actual result, description: "Add a redacted screenshot or exact error if useful." }
+    validations: { required: true }
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy check
+      options:
+        - label: "This report contains no private records, passwords or transfer links."
+          required: true

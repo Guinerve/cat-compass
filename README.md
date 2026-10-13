@@ -1,91 +1,132 @@
-# cat-compass
+<p align="center">
+  <img src="assets/banner.svg" alt="Cat Compass. A little care. A better day together." width="100%" />
+</p>
 
-> A personalised, interactive care plan for your cat.
+<p align="center">
+  <a href="https://github.com/Guinerve/cat-compass/releases/latest"><strong>Download the desktop app</strong></a> ·
+  <a href="https://guinerve.github.io/cat-compass/">Open the web app</a> ·
+  <a href="docs/getting-started.md">Getting started</a> ·
+  <a href="docs/sources-and-safety.md">Sources & safety</a>
+</p>
 
-**Status:** v0.1 core built; energy maths, vaccines and ACT rules checked against sources; UI checked in real Chrome
+<p align="center">
+  <a href="https://github.com/Guinerve/cat-compass/actions/workflows/ci.yml"><img src="https://github.com/Guinerve/cat-compass/actions/workflows/ci.yml/badge.svg" alt="CI status" /></a>
+  <a href="https://github.com/Guinerve/cat-compass/releases"><img src="https://img.shields.io/github/v/release/Guinerve/cat-compass?color=246653" alt="Latest release" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-246653" alt="MIT licence" /></a>
+  <img src="https://img.shields.io/badge/storage-local%20by%20default-246653" alt="Local storage by default" />
+</p>
 
-![cat-compass demo](assets/demo.gif)
+# Cat Compass
 
-![cat-compass screenshot](assets/screenshot.png)
+A care space for life with your cat. Keep food amounts, health notes, weight records and reminders together. Read the sources behind the guidance. Take a copy to your phone when you need it.
 
-## The idea
+No account. No analytics. No subscription. Records stay on your device unless you choose to export them.
 
-Enter a cat's details and get a complete care plan: how much of *your* food to feed, health risks to watch for, a daily routine, play and toy ideas, and a first-month guide for new owners. Scope v1 at 1–2 days.
+> **Early-access software, not veterinary advice.** The desktop builds are unsigned. A veterinarian has not reviewed or approved the app. Use your vet's instructions for treatment, special diets and vaccine dates. [Read the limits](docs/sources-and-safety.md).
 
-## Stack
+![Cat Compass daily care dashboard](assets/screenshot.png)
 
-React, TypeScript, Vite, Vitest. Breed, toy and care content lives in editable JSON. Local storage only, no account.
+## Download
 
-Dev server binds to `0.0.0.0` on port **5195** so it's reachable over Tailscale (`vite --host 0.0.0.0 --port 5195 --strictPort`). Deploy to GitHub Pages.
+Download installers from [GitHub Releases](https://github.com/Guinerve/cat-compass/releases/latest), not from an unknown mirror. Each release includes SHA-256 checksums and the source commit.
 
-## Build plan (v1)
+| Computer | File to choose | Status |
+|---|---|---|
+| Mac with Apple Silicon | `Cat-Compass-0.2.0-mac-arm64.dmg` | Packaged app checked on a real Mac |
+| Intel Mac | `Cat-Compass-0.2.0-mac-x64.dmg` | Automated package build; runtime checks still needed |
+| Windows 64-bit | `Cat-Compass-0.2.0-win-x64.exe` | Automated package build; runtime checks still needed |
+| Linux 64-bit | `Cat-Compass-0.2.0-linux-x64.AppImage` | Automated package build; runtime checks still needed |
 
-- [ ] (partly done) **Profile wizard:** (single-page form, not a stepped wizard; BCS picker is a 1–9 button row with descriptions, no illustrations yet)  name, age/birthdate, breed (incl. domestic short/long hair), weight with a visual 1–9 body-condition-score picker, sex and desexed status, indoor/outdoor/enclosure, activity level, health conditions, food kcal per kg or per can
-- [x] **Feeding:** RER = 70 × kg^0.75 × life-stage factor; grams/cans of the actual food; wet/dry split; meal schedule; water target; weight-loss mode feeds for ideal weight with a safe weekly cap
-- [ ] (partly done) **Health:** schedule and breed risks done (11 breeds); the schedule text needs a vet-source check. breed-linked risks and signs to watch; Australian vaccine and parasite schedule (F3 core, FIV for outdoor cats, paralysis ticks on the east coast); checkup rhythm by life stage
-- [x] **Red-flag panel:** (8 items, always visible at the top) male cat straining to urinate, not eating >24 h, open-mouth breathing, lily exposure, permethrin dog flea products
-- [x] **Daily routine timeline:** 2–3 week tooth-brushing training plan, grooming by coat length, nail trims, litter (one box per cat plus one, scooped daily), play built on hunt → catch → eat → groom → sleep
-- [x] **Toys:** (6 entries; more needed) bought and DIY with step-by-step instructions and safety notes (no unsupervised string toys)
-- [x] **New owners:** "things I wish I'd had", first-week guide, cat-proofing checklist, shopping list with rough costs
-- [x] **ACT mode:** verified against the ACT Government page on 2026-10-13; rules change, so re-check before relying on it. local containment and registration rules (verify current rules before shipping)
-- [x] Multiple cats; printable one-page fridge sheet
+Only download a platform once its file is present on the release page. A build is not the same as a runtime test. The unsigned macOS app is not notarized. Windows may show an unknown-publisher warning. Do not disable system security to install it. [Install and verify a download](docs/installation.md).
 
-## Run it
+Prefer a browser? [Open Cat Compass](https://guinerve.github.io/cat-compass/). Install it from Chrome, Edge or Safari for offline use after one full online load. Browser records and desktop records are separate until you transfer them.
+
+## Care that fits the day
+
+| Tool | What it does |
+|---|---|
+| **Today** | Daily comfort checks, food summary and upcoming tasks |
+| **Profiles** | Separate details, vet contacts and microchip numbers for each cat |
+| **Feeding** | Label-based wet/dry amounts, meal portions and a treat allowance |
+| **Health** | Vet discussion points, breed notes and emergency signs |
+| **Care journal** | Dated weights, observations, vet visits and a weight chart |
+| **Reminders** | Dates you choose, desktop alerts and phone calendar export |
+| **Care library** | 15 original guides with linked sources and clear limits |
+| **Phone & backup** | Password-protected profile transfer and full local backups |
+| **Care sheet** | A printable handover for the fridge, a sitter or the vet |
+
+## From the label to the bowl
+
+New profiles start with examples, not assumed facts about your cat. Feeding amounts stay hidden until you confirm the profile and food labels.
+
+- Energy follows **AAHA 2021 feline Box 1**: `RER = 70 × weightKg^0.75`, with the feline life-stage factors.
+- Active food needs valid energy units. Missing data and fractional meals do not produce a plan.
+- Treats stay within **10% of daily calories**. Their calories come out of the food allowance.
+- Illness, low body condition, pregnancy and nursing need a daily calorie target set by your vet.
+- Weight loss needs a vet-agreed target. The app does not derive target weight from BCS or predict a finish date.
+
+The normal/high-activity mapping is an app assumption, not an AAHA rule. Calculated portions are starting estimates, not prescriptions. [Feeding setup](docs/getting-started.md#feeding).
+
+## Your phone, without another account
+
+Export `.ics` reminders to a calendar that syncs with your phone. Calendar alerts can work when Cat Compass is closed. Your calendar controls delivery.
+
+Use a password-protected QR link to transfer one cat's profile and reminders to the [HTTPS web app](https://guinerve.github.io/cat-compass/). A full backup also includes notes, weight history and checklists.
+
+Transfers are copies, **not automatic two-way sync**. Calendar edits do not propagate. Backup files are not encrypted. [Phone setup and privacy](docs/phone-and-backup.md).
+
+<details>
+<summary>See the phone layout</summary>
+<p align="center"><img src="assets/phone.png" alt="Cat Compass on a phone-sized screen" width="320" /></p>
+</details>
+
+## Read the evidence
+
+The app includes **31 source records** with exact page links, read dates, checked sections and limits. Veterinary guidelines support the formula and care principles. University and welfare pages support warning signs. Clinic opinions are labelled local and dated. Cats.com is further owner reading, not the calculator authority.
+
+The app does not diagnose disease, prescribe medicine, calculate neonatal milk feeds or formulate homemade diets. Guidance is mainly Australian-facing. The breed list is not complete. The ACT containment boundary for a cat born on 1 July 2022 remains unresolved and is stated as such.
+
+[Source and safety policy](docs/sources-and-safety.md) · [Research ledger](evidence/veterinary-research.json) · [Inspection boundaries](evidence/README.md)
+
+## Build from source
+
+Use Node.js 22 or later.
 
 ```bash
-npm install
-npm run dev      # http://0.0.0.0:5195
-npm test         # 24 tests
+git clone https://github.com/Guinerve/cat-compass.git
+cd cat-compass
+npm ci
+npm run dev
 ```
 
-## How I know it's right
+Development binds to `0.0.0.0:5195`. Production preview uses port `5197`. Both reject port conflicts.
 
-24 unit tests pass (`src/feeding.test.ts`, `src/health.test.ts`).
+```bash
+npm run check          # Unit tests, type check, build and browser tests
+npm run desktop        # Build and run Electron
+npm run desktop:dist   # Build an installer for the current OS
+npm run test:desktop   # Drive the real desktop app with isolated test records
+```
 
-Review fixes: invalid weight/age/BCS/meals now show a message instead of `NaN kcal` (including on the printed fridge sheet); corrupt saved data is backed up and reported, not silently replaced; a failed save shows a warning; an error boundary replaces a blank page.
+Install the test browser once with `npx playwright install chromium`. [Development and release guide](docs/development.md).
 
-**Verified against sources (2026-10-13):**
+## What has been checked
 
-- **Energy maths** against the **AAHA 2021 Nutrition and Weight Management Guidelines, Box 1**: RER = 70 × kg^0.75, the worked example (4.5 kg → kg^0.75 = 3.09, RER 216 kcal/day) is a test, and the feline life-stage factors (neutered adult 1.2–1.4, intact 1.4–1.6, inactive/obese-prone 1.0, weight loss 0.8 of **ideal** weight, growth 2.5). Checking found and fixed two errors: I had used 2.0 for kittens aged 4–12 months (AAHA's feline factor is 2.5), and an unsourced +0.2 for high activity and a senior cap. Normal activity now uses the low end of AAHA's range and high activity the high end.
-- **ACT rules** from the ACT Government cat pages (microchip, registration over 8 weeks, desexing unless under 3 months, containment for cats born on or after 1 July 2022 and in 17 declared suburbs). This replaced placeholder text that was materially wrong about containment.
-- **Vaccines**: core vaccines and the kitten course (from 6–8 weeks, every 2–4 weeks to at least 16 weeks, booster from 26 weeks, then no more often than every 3 years) match the WSAVA 2024 guidelines as summarised in search results; I did not read the PDF itself.
+Local results on 13 October 2026:
 
-**Also verified (2026-10-13, via search results, not primary papers):** lily toxicity (RSPCA Australia, International Cat Care: all parts including pollen and vase water; kidney failure within days), "not eating for a day: see a vet that day" and the fatty-liver risk (a Sydney vet clinic's triage guidance), and the **0.5–2 % per week** safe weight-loss range (AAHA range as cited by Tufts and a veterinary review; the app uses 1 %). Two claims with no source were **removed**: a "fatal within 24–48 hours" timeframe for urinary blockage, and a 50 ml/kg/day water target.
+- **61 unit tests** cover feeding boundaries, storage, transfer, source coverage, calendar export and native IPC validation.
+- **24 browser tests** cover desktop and phone-sized Chromium, persistence, feeding errors, QR transfer, backups, printing and production offline reload.
+- The packaged **Apple Silicon macOS app** passed offline launch, renderer isolation, restricted preload API, native schedule persistence and close-to-tray checks.
+- The production dependency audit reports no known advisories. The full audit still reports eight moderate advisories in development packaging dependencies.
 
-**Also verified (2026-10-13, via search results, not primary papers):** paralysis-tick signs, including that they are often subtle in cats (RSPCA Queensland, MSD Veterinary Manual, clinic guidance); that some dog tick/flea products contain permethrin which can kill cats (clinic guidance); and breed links for HCM (Maine Coon, Ragdoll, with others reported), PKD (Persian, British Shorthair) and diabetes (Burmese), from consumer genetics and pet-health sites rather than a veterinary reference. **Removed because unsupported or inconsistent:** risk lists for Siamese, Abyssinian and Sphynx, Ragdoll bladder stones, Burmese hypokalaemia, generic domestic-cat risks, and a fixed worming schedule (published schedules disagree, so the app now gives a range and defers to your vet).
+Real iOS/Android installation, audible calendar alerts and non-Apple-Silicon desktop runtime checks remain open. Code signing, notarization and veterinary review are release limits, not completed work. [Testing details](docs/development.md#verification).
 
-**Also verified / corrected (2026-10-13):** sudden hind-leg loss as an emergency (aortic thromboembolism) and paracetamol/ibuprofen toxicity (AVA and an emergency-vet guide, via search). **Removed:** the "about 10 % per BCS point" ideal-weight formula. A study I found shows body fat per BCS point is not uniform (inactive neutered cats averaged 32 % body fat at BCS 5), and I found no source for any weight conversion. Weight-loss mode now needs a **target weight set with your vet** (AAHA says to base the plan on ideal weight) and gives no plan, only an explanation, without one.
+## Help and contribute
 
-**Every red flag now has a named source** (the open-mouth-breathing flag was the last: veterinary clinic guidance via search). **All red-flag, breed and parasite sources are search results, mostly clinic and consumer pages, not primary guidelines**; the only primary documents I read are AAHA 2021 Box 1 and the ACT Government page. Treat the content as "checked against reasonable public sources", not as peer-reviewed, and have a vet review it before real people rely on it.
+[Report a bug](https://github.com/Guinerve/cat-compass/issues/new/choose) · [Ask for a feature](https://github.com/Guinerve/cat-compass/issues/new/choose) · [Contribution guide](CONTRIBUTING.md) · [Security policy](SECURITY.md) · [Changelog](CHANGELOG.md) · [Roadmap](ROADMAP.md)
 
-Sources are named per item in `src/content/*.json` (WSAVA, AAFP / ISFM, RSPCA Australia, Cornell Feline Health Center, AVA) but not yet linked to specific pages.
+For a sick cat or suspected poisoning, contact a veterinarian. GitHub issues are not monitored as an emergency service. Do not upload real veterinary records or private backup files to public issues.
 
-## Limits
+## Licence
 
-The weight-loss target estimates ideal weight as ~10 % per BCS point above 5. Breed predispositions are tendencies, not diagnoses.
-
-**Not veterinary advice.** "Check with your vet" prompts wherever a recommendation depends on the individual cat.
-
-## Browser check
-
-Checked in real Chrome (headless, driven with puppeteer) on 2026-10-12: the profile form, feeding output and fridge sheet work; a weight of −3 shows "Enter a weight between 0.3 and 15 kg" instead of NaN. Content is partly verified (see below). Not checked: print layout.
-
-## Next (tomorrow)
-
-- Replace the clinic and consumer-site sources with veterinary references (WSAVA/AAFP/ISFM guidelines) and add a real URL per item; get a vet to review the whole app.
-- BCS illustrations; stepped wizard if it feels better.
-
-## Stretch
-
-Weight tracker with trend chart; reminders export to calendar (.ics).
-
-## Definition of done
-
-- [x] Hero GIF or screenshot at the top of this README
-- [x] Live demo link or one-command run (`npm install && npm run dev`)
-- [ ] "How I know it's right" section filled in with real results
-- [ ] Tests passing in CI, badge added
-- [ ] "Limits" section written
-- [ ] Licence chosen, repo description and topics set
-- [ ] Pinned on GitHub profile and added to guinerve.github.io
-- [ ] Added to `career-radar/data/cv/portfolio.json`
+Project code is [MIT licensed](LICENSE). Linked source material retains its own rights. Articles, photographs and application code from Cats.com are not republished in the product. Cat Compass is not affiliated with Cats.com or the veterinary organisations cited. [Third-party notices](THIRD_PARTY_NOTICES.md).
