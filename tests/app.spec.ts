@@ -76,3 +76,11 @@ test("care sheet never prints invalid or unconfirmed portions", async ({ page })
   await navigate(page,"Care sheet"); await expect(page.locator(".fridge")).toContainText("No feeding amounts");
   await page.emulateMedia({ media: "print" }); await expect(page.locator(".sidebar")).not.toBeVisible(); await expect(page.locator(".fridge")).toBeVisible();
 });
+test("a removed cat stays removed after reload", async ({ page }) => {
+  await navigate(page,"Profile"); await page.getByLabel("Name", { exact: true }).fill("Keeper");
+  await page.getByRole("button", { name: "Add a cat", exact: true }).click(); await page.getByLabel("Name", { exact: true }).fill("Leaving");
+  page.once("dialog", d => d.accept()); await page.getByRole("button", { name: "Remove this cat and their records", exact: true }).click();
+  await expect(page.getByLabel("Selected cat").locator("option")).toHaveCount(1);
+  await page.reload();
+  await expect(page.getByLabel("Selected cat").locator("option")).toHaveText(["Keeper"]);
+});

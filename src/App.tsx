@@ -32,9 +32,10 @@ export function App() {
   const cat = cats.find(c => c.id === selected) || cats[0]!;
   const changeCats = (data: CatProfile[]) => { if (!saveCats(data)) setNotice("Profiles could not be saved. Export a backup before you close the app."); setCats(data); };
   const update = (patch: Partial<CatProfile>) => changeCats(cats.map(c => c.id === cat.id ? { ...c, ...patch } : c));
-  const changeCare = (data: CareData) => {
+  // Pass nextCats when the same action also changes profiles, so the save does not restore an old list.
+  const changeCare = (data: CareData, nextCats: CatProfile[] = cats) => {
     // Persist a first-visit profile ID before saving its related care records.
-    if (!saveCats(cats) || !saveCare(data)) setNotice("Care records could not be saved. Export a backup before you close the app.");
+    if (!saveCats(nextCats) || !saveCare(data)) setNotice("Care records could not be saved. Export a backup before you close the app.");
     setCareDirty(true); setCare(data);
   };
   useEffect(() => {
@@ -79,9 +80,9 @@ export function App() {
   const remove = () => {
     if (cats.length < 2 || !window.confirm(`Remove ${cat.name} and their reminders, journal and checklists? This cannot be undone.`)) return;
     const next = cats.filter(c => c.id !== cat.id);
-    changeCats(next); setSelected(next[0]!.id);
+    setCats(next); setSelected(next[0]!.id);
     const checks = { ...care.checks }; delete checks[cat.id];
-    changeCare({ reminders: care.reminders.filter(r => r.catId !== cat.id), journal: care.journal.filter(r => r.catId !== cat.id), checks });
+    changeCare({ reminders: care.reminders.filter(r => r.catId !== cat.id), journal: care.journal.filter(r => r.catId !== cat.id), checks }, next);
   };
   const complete = (id: string) => changeCare({ ...care, reminders: care.reminders.map(r => r.id === id ? completeReminder(r) : r) });
   return <div className="workspace">

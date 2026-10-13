@@ -22,7 +22,7 @@ export interface FeedingInput {
   targetWeightKg?: number;
   /** kcal metabolisable energy per kg of food (dry) */
   dryKcalPerKg?: number;
-  /** kcal per 85 g can, or per-can energy with canGrams */
+  /** kcal per whole can or pouch; wetCanGrams is that pack's weight */
   wetKcalPerCan?: number;
   wetCanGrams?: number;
   /** share of daily kcal from wet food, 0–1 */
