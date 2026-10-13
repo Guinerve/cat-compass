@@ -10,13 +10,13 @@ Download the app from [GitHub Releases](https://github.com/Guinerve/cat-compass/
 4. Open the DMG. Move Cat Compass to Applications.
 5. Open the app only if you trust this unsigned build.
 
-The app is not signed or notarized. macOS may block it. Review the release and publisher before you use any system approval control. Do not disable Gatekeeper, remove quarantine flags or turn off malware protection.
+The app is not signed or notarised. macOS may block it. Review the release and publisher before you use any system approval control. Do not disable Gatekeeper, remove quarantine flags or turn off malware protection.
 
 Closing the window hides the app. It continues to check reminders. Use the tray menu or **Quit Cat Compass** to stop it. System settings control notifications. No alerts are promised while the computer is asleep or the app is quit.
 
 ## Windows
 
-Choose the `win-x64.exe` installer only after it appears in the release. Run it and choose an install location. The installer is unsigned, so Windows may show an unknown-publisher warning. Do not disable protection to install it.
+Choose the `win-x64.exe` installer only after it appears in the release. Run it and choose an install location. The installer is unsigned, so Windows may warn about an unknown publisher. Do not disable protection to install it.
 
 The package build is automated. A real Windows runtime check has not yet been completed.
 

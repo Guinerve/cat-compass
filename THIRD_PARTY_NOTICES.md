@@ -1,4 +1,4 @@
-# Third-party notices
+# Third party notices
 
 Cat Compass code is MIT licensed. This does not relicense linked veterinary content, research papers, articles or external photographs.
 
@@ -24,4 +24,4 @@ The Cat Compass cat artwork, banner and app icon are original project assets. Th
 
 The app links AAHA, WSAVA, Cornell, AAFP/ISFM, RSPCA, government and other source pages. Short evidence excerpts remain attributed. The guides are original summaries with source limits.
 
-Cats.com articles, photographs and application code are not republished in the product. Local static-inspection captures are ignored by git and excluded from packages. Cat Compass is not affiliated with Cats.com, GitHub, Notion or the veterinary organisations cited.
+Cats.com articles, photographs and application code are not republished in the product. Local inspection captures are ignored by git and left out of packages. Cat Compass is not affiliated with Cats.com, GitHub, Notion or the veterinary organisations cited.

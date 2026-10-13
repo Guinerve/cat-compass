@@ -21,7 +21,7 @@ Use Node.js 22 or later. See [Development](docs/development.md) for commands and
 - Keep the browser app free of analytics and remote fonts.
 - Add a regression test for the public behaviour that changed.
 
-Run `npm run check` before submitting. For desktop changes, also run `npm run test:desktop`. State what you did not test. Never use real pet-owner records in a fixture or screenshot.
+Run `npm run check` before submitting. For desktop changes, also run `npm run test:desktop`. State what you did not test. Never use real owner records in a fixture or screenshot.
 
 ## Health content
 
@@ -29,7 +29,7 @@ A named organisation alone is not a citation. Include the exact URL, source titl
 
 Keep observations separate from app assumptions and unresolved points. A source check is not clinical approval. Do not add diagnosis, dosing or exact treatment schedules without a defined clinical review process. Preserve Australian/local product and legal limits.
 
-Update `src/sources.ts`, the relevant content and the source-coverage tests together. Use short excerpts and original summaries. Do not republish third-party articles, photographs or application code.
+Update `src/sources.ts`, the relevant content and the source coverage tests together. Use short excerpts and original summaries. Do not republish articles, photographs or application code.
 
 ## Pull request checklist
 
@@ -40,6 +40,6 @@ Update `src/sources.ts`, the relevant content and the source-coverage tests toge
 - [ ] Storage migration and backup compatibility were checked.
 - [ ] Clinical/source limits remain visible.
 - [ ] Documentation and changelog match the behaviour.
-- [ ] No tokens, private records or raw third-party captures are included.
+- [ ] No tokens, private records or raw captures of other sites are included.
 
 Submitting code permits its use under the repository's MIT licence. Linked source material keeps its own rights. Follow the [community rules](CODE_OF_CONDUCT.md).

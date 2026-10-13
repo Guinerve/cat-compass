@@ -1,10 +1,10 @@
 # Use your phone and keep a backup
 
-Cat Compass does not provide automatic two-way sync. Calendar exports, QR transfers and backup imports create copies.
+Cat Compass does not sync devices. Calendar exports, QR transfers and backup imports create copies.
 
 ## Calendar reminders
 
-1. Set a task and date in **Reminders**. Use vet-agreed dates or product-label intervals for health care.
+1. Set a task and date in **Reminders**. For health care, use dates from your vet or the interval on the product label.
 2. Select **Export all to calendar**.
 3. Import the `.ics` file into a calendar account shared with your phone.
 4. Check the imported times and enable calendar alerts.
@@ -22,7 +22,7 @@ Open [Cat Compass over HTTPS](https://guinerve.github.io/cat-compass/).
 
 Complete one online load before testing offline use. External source pages still need a connection. Browser records are separate from desktop records. Ordinary HTTP development URLs do not support phone PWA installation.
 
-Phone-sized Chromium tests cover layout and transfer. Real iOS/Android installation and alert delivery remain unverified.
+Browser tests at phone width in Chromium cover layout and transfer. Real iOS/Android installation and alert delivery remain unverified.
 
 ## Transfer one profile
 

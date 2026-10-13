@@ -2,7 +2,7 @@
   "name": "cat-compass",
   "private": true,
   "version": "0.2.0",
-  "description": "Local cat care, feeding, records and reminders",
+  "description": "Cat care app for feeding plans, health notes, weights and reminders that stay on your device",
   "author": "Cat Compass contributors",
   "license": "MIT",
   "main": "desktop/main.mjs",

@@ -17,4 +17,4 @@ List checks run and their results. For content, include exact source sections an
 - [ ] Storage and backup compatibility were checked.
 - [ ] Source records and clinical limits match the change.
 - [ ] Documentation and changelog are current.
-- [ ] No private records, tokens or raw third-party captures are included.
+- [ ] No private records, tokens or raw captures of other sites are included.

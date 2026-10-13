@@ -12,7 +12,7 @@ The web app uses browser local storage. The desktop app uses its local browser p
 
 You choose to export a backup, care sheet or calendar file, or create a transfer link. Full backups and printed sheets are not encrypted. A calendar provider receives events when you import them into its service.
 
-A QR transfer contains an encrypted snapshot in a URL fragment. The password is entered separately. Browser history, bookmarks or clipboard services may retain copies. The receiving app reads the fragment. Code from the trusted host can also read it. This is not a live-sync connection.
+A QR transfer contains an encrypted snapshot in a URL fragment. The password is entered separately. Browser history, bookmarks or clipboard services may retain copies. The receiving app reads the fragment. Code from the trusted host can also read it. This is not a live sync connection.
 
 External source links open the publisher's site. The publisher controls its own privacy practices. The app sends no referral details through those links.
 
