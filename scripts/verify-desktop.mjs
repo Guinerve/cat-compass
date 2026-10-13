@@ -2,7 +2,7 @@ import { _electron as electron, expect } from "@playwright/test";
 import { mkdir, mkdtemp, readFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { tmpdir } from "node:os";
-const base = process.env.OPENCODE_TEMP_DIR || tmpdir();
+const base = tmpdir();
 const data = await mkdtemp(join(base, "cat-compass-desktop-"));
 const executablePath = process.env.CAT_COMPASS_EXECUTABLE;
 const launch = executablePath ? { executablePath, args: [`--test-data-dir=${data}`] } : { args: [resolve("."), `--test-data-dir=${data}`] };
