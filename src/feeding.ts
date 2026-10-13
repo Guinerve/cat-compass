@@ -93,11 +93,11 @@ export function feedingPlan(i: FeedingInput): FeedingPlan {
   let weightLoss: FeedingPlan["weightLoss"];
   if (losing) {
     weightLoss = { minWeeklyLossKg: i.weightKg * 0.005, maxWeeklyLossKg: i.weightKg * 0.02 };
-    notes.push("Weight-loss plans should be set up and monitored with your vet. Never fast a cat: rapid loss risks hepatic lipidosis.");
+    notes.push("Plan and monitor weight loss with your vet. Never fast a cat: rapid loss risks hepatic lipidosis.");
   }
   if (i.bcs <= 3) notes.push("This cat looks underweight. Check with your vet before changing food.");
-  if (stage === "kitten-young" || stage === "kitten-older") notes.push("Kittens grow fast: reweigh weekly and adjust. Use kitten-formulated food.");
-  if (i.vetKcalPerDay) notes.push("This plan uses your vet's daily calorie target, not the life-stage estimate. Include treats in that total.");
+  if (stage === "kitten-young" || stage === "kitten-older") notes.push("Kittens grow fast: reweigh weekly and adjust. Use food made for kittens.");
+  if (i.vetKcalPerDay) notes.push("This plan uses your vet's daily calorie target, not the life stage estimate. Include treats in that total.");
   if (!i.vetKcalPerDay && i.activity !== "low" && !growing && !losing) notes.push("App assumption: normal activity uses the lower end of AAHA’s adult range; high activity uses the upper end. AAHA does not assign activity levels to those endpoints.");
   if (losing) notes.push("Use a diet suitable for supervised weight loss. Cutting an ordinary diet can reduce essential nutrients.");
   notes.push("These are starting amounts, not prescriptions. Monitor weight and body condition with your vet. Offer fresh water at all times; no fixed water quota is calculated.");
@@ -136,9 +136,9 @@ export function feedingProblems(i: FeedingInput): string[] {
   if (i.reproductiveState && !["normal", "pregnant", "nursing"].includes(i.reproductiveState)) out.push("Select a valid reproductive state.");
   if ((i.conditions?.trim() || i.reproductiveState === "pregnant" || i.reproductiveState === "nursing" || i.bcs <= 3) && !vet) out.push("Health conditions, pregnancy, nursing or low body condition need a daily calorie target set by your vet.");
   if (i.weightLossMode) {
-    if (i.ageMonths < 12 || i.reproductiveState === "pregnant" || i.reproductiveState === "nursing") out.push("Weight-loss mode is not for growing, pregnant or nursing cats.");
-    if (i.bcs <= 5) out.push("Weight-loss mode needs an overweight body condition score and vet review.");
-    if (!Number.isFinite(i.targetWeightKg) || i.targetWeightKg! < 0.3 || i.targetWeightKg! >= i.weightKg) out.push("Set a vet-agreed target weight of at least 0.3 kg, below current weight.");
+    if (i.ageMonths < 12 || i.reproductiveState === "pregnant" || i.reproductiveState === "nursing") out.push("Weight loss mode is not for growing, pregnant or nursing cats.");
+    if (i.bcs <= 5) out.push("Weight loss mode needs an overweight body condition score and vet review.");
+    if (!Number.isFinite(i.targetWeightKg) || i.targetWeightKg! < 0.3 || i.targetWeightKg! >= i.weightKg) out.push("Set a target weight agreed with your vet. It must be at least 0.3 kg and below current weight.");
   }
   if (!out.length) {
     const kcal = vet || rer(i.weightLossMode ? i.targetWeightKg! : i.weightKg) * (i.weightLossMode ? 0.8 : stageFactor(i));

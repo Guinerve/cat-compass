@@ -26,7 +26,7 @@ test("feeding requires confirmed labels and leaves invalid controls editable", a
 test("a health condition requires the vet calorie target", async ({ page }) => {
   await navigate(page,"Profile"); await page.getByRole("checkbox", { name: "I checked this cat’s age", exact: false }).check(); await page.getByLabel("Known health conditions").fill("Kidney disease"); await navigate(page,"Feeding");
   await page.getByRole("checkbox", { name: "I checked the food energy", exact: false }).check(); await expect(page.getByRole("alert")).toContainText("set by your vet");
-  await page.getByLabel("Vet-set daily calories", { exact: false }).fill("250"); await expect(page.locator(".calorie-number")).toContainText("250");
+  await page.getByLabel("Daily calories set by your vet", { exact: false }).fill("250"); await expect(page.locator(".calorie-number")).toContainText("250");
   await page.getByLabel("Treats (kcal/day)", { exact: true }).fill("30"); await expect(page.getByRole("alert")).toContainText("10%");
 });
 test("reminders persist and export a calendar with an alarm", async ({ page }) => {
@@ -43,7 +43,7 @@ test("weight records update the chart and profile", async ({ page }) => {
   await navigate(page,"Profile"); await expect(page.getByLabel("Current weight (kg)", { exact: true })).toHaveValue("4.3");
 });
 test("guides are searchable and source claims have exact links", async ({ page }) => {
-  await navigate(page,"Care library"); await page.getByRole("searchbox", { name: "Search care guides" }).fill("tooth-brushing"); await page.getByRole("button", { name: /Start a gentle tooth-brushing habit/ }).click();
+  await navigate(page,"Care library"); await page.getByRole("searchbox", { name: "Search care guides" }).fill("brushing teeth"); await page.getByRole("button", { name: /Start brushing teeth gently/ }).click();
   await expect(page.locator(".opened-guide")).toContainText("inflamed");
   await page.locator(".opened-guide").getByText("Cornell Feline Health Center", { exact: true }).click(); await expect(page.locator(".opened-guide a").first()).toHaveAttribute("href", /vet\.cornell\.edu/);
   await navigate(page,"Sources"); await page.getByRole("searchbox", { name: "Search sources" }).fill("Box 1"); await expect(page.locator(".source-card")).toHaveCount(1); await expect(page.locator(".source-card a")).toHaveAttribute("href", /nutritiongl_box1\.pdf$/);
