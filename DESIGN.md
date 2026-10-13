@@ -13,7 +13,8 @@ Warm, quiet, practical. A left rail separates care tools from the reference libr
 - Muted: `#626d65`; border: `#dfE4dd`.
 - Primary: `#246653`; peach: `#f7e7d9`; mint: `#e8f0e6`.
 - Alert: `#a63127`. Show a word and icon with each alert.
-- Type: system sans for controls; Georgia for large editorial headings.
+- Dark mode follows the system setting. Canvas `#151b19`, card `#1d2522`, ink `#e4ebe6`, primary `#7cc4a8`.
+- Type: system sans for controls; Georgia for large editorial headings. No body or label text below 12 px.
 - Spacing: 4, 8, 12, 16, 24, 32, 48 px. Cards: 20 px radius.
 
 ## Components and layout
