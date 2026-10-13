@@ -65,7 +65,12 @@ jobs:
           GH_REPO: ${{ github.repository }}
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
-          if ! gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            if [ "$(gh release view "$RELEASE_TAG" --json isDraft --jq .isDraft)" != "true" ]; then
+              echo "Refusing to replace assets in a published release. Use a new version tag."
+              exit 1
+            fi
+          else
             gh release create "$RELEASE_TAG" --verify-tag --draft --title "Cat Compass ${RELEASE_TAG#v} · early access" --notes-file "docs/releases/${RELEASE_TAG#v}.md"
           fi
           gh release upload "$RELEASE_TAG" release/Cat-Compass-* release/SHA256SUMS.txt --clobber

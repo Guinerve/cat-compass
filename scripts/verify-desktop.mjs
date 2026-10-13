@@ -1,5 +1,5 @@
 import { _electron as electron, expect } from "@playwright/test";
-import { mkdtemp, readFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { tmpdir } from "node:os";
 const base = process.env.OPENCODE_TEMP_DIR || tmpdir();
@@ -19,7 +19,9 @@ try {
   await expect.poll(async () => JSON.parse(await readFile(join(data, "reminder-schedule.json"), "utf8")).reminders.length).toBe(1);
   const reminders = JSON.parse(await readFile(join(data, "reminder-schedule.json"), "utf8"));
   if (reminders.reminders[0].title !== "Desktop smoke test") throw new Error("Native reminder schedule differs from UI.");
-  await page.screenshot({ path: "assets/desktop-reminders.png" });
+  const screenshots = process.env.CAT_COMPASS_SCREENSHOT_DIR || "test-results/desktop";
+  await mkdir(screenshots, { recursive: true });
+  await page.screenshot({ path: join(screenshots, "reminders.png") });
   await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].close());
   if (await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].isVisible())) throw new Error("Window should hide, not quit.");
   console.log(JSON.stringify({ status: "passed", target: executablePath || "development Electron", data, checks: ["offline UI", "sandboxed renderer", "narrow IPC bridge", "persisted native schedule", "close-to-tray"] }, null, 2));

@@ -121,6 +121,8 @@ Local results on 13 October 2026:
 
 Real iOS/Android installation, audible calendar alerts and non-Apple-Silicon desktop runtime checks remain open. Code signing, notarization and veterinary review are release limits, not completed work. [Testing details](docs/development.md#verification).
 
+The public Apple Silicon ZIP was downloaded from GitHub without authentication. Its hash matched the published checksum, and the downloaded app passed the desktop smoke check. [Release evidence](evidence/release-0.2.0.json).
+
 ## Help and contribute
 
 [Report a bug](https://github.com/Guinerve/cat-compass/issues/new/choose) · [Ask for a feature](https://github.com/Guinerve/cat-compass/issues/new/choose) · [Contribution guide](CONTRIBUTING.md) · [Security policy](SECURITY.md) · [Changelog](CHANGELOG.md) · [Roadmap](ROADMAP.md)

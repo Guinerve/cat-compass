@@ -1,0 +1,40 @@
+{
+  "version": "0.2.0",
+  "checkedOn": "2026-10-13",
+  "repository": "https://github.com/Guinerve/cat-compass",
+  "visibility": "public",
+  "release": "https://github.com/Guinerve/cat-compass/releases/tag/v0.2.0",
+  "sourceCommit": "c4ade5fcddce17d3d2dd669944a3fe57a4c07429",
+  "buildRun": "https://github.com/Guinerve/cat-compass/actions/runs/38371108320",
+  "ciRun": "https://github.com/Guinerve/cat-compass/actions/runs/38371108399",
+  "followupBuildRun": "https://github.com/Guinerve/cat-compass/actions/runs/38372386395",
+  "followupBuildScope": "All four package jobs passed with current GitHub Actions runtimes. This main-branch run did not replace published assets.",
+  "companion": "https://guinerve.github.io/cat-compass/",
+  "checks": {
+    "unitTestsPassed": 61,
+    "browserTestsPassed": 24,
+    "platformPackagesBuilt": ["mac-arm64", "mac-x64", "win-x64", "linux-x64"],
+    "completeInstallerAssets": 6,
+    "checksumEntries": 6,
+    "publicReadmeImagesLoaded": true,
+    "githubCommunityProfileScore": 100,
+    "privateVulnerabilityReportingEnabled": true,
+    "httpsCompanionRendered": true,
+    "anonymousDownload": {
+      "file": "Cat-Compass-0.2.0-mac-arm64.zip",
+      "bytes": 131932492,
+      "sha256": "832fc3a37b4e3a339502bdc9abc810fa7d8a4656d2a8d820cf224d466f0c8dd9",
+      "matchesPublishedChecksum": true
+    },
+    "downloadedAppSmokeTestPassed": ["offline launch", "sandboxed renderer", "restricted preload API", "native reminder schedule persistence", "close-to-tray"]
+  },
+  "limits": [
+    "Packages are unsigned; macOS is not notarized.",
+    "Clinical content has not received veterinary approval.",
+    "Package build success is not a runtime check. Intel Mac, Windows and Linux runtime checks remain open.",
+    "Real iOS/Android installation and audible calendar alerts remain unverified.",
+    "Calendar export and QR transfer are copies, not automatic two-way sync.",
+    "Checksum metadata is integrity evidence, not a code-signing certificate.",
+    "GitHub's community profile score measures repository files, not software or clinical quality."
+  ]
+}
